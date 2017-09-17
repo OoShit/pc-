@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>邦伯物联网平台</title>
+    <link href="__css__/bootstrap.min.css" rel="stylesheet">
+    <link href="__css__/plugins/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <!-- Toastr style -->
+    <link href="__css__/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <!-- Gritter -->
+    <link href="__js__/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    <link href="__css__/animate.css" rel="stylesheet">
+    <link href="__css__/style.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="__css__/main.css">
+</head>
+
+<body>
+    <div id="wrapper" class="gray-bg login-wrapper">
+        <div id="login-carousel" class="carousel slide">
+            <ol class="carousel-indicators">
+                <li class="active" data-target="#login-carousel" data-slide-to="0"></li>
+                <li data-target="#login-carousel" data-slide-to="1"></li>
+                <li data-target="#login-carousel" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active">
+                    <img src="__img__/index/ca1.png" alt="First slide">
+                </div>
+                <div class="item">
+                    <img src="__img__/index/ca2.png" alt="Second slide">
+                </div>
+                <div class="item">
+                    <img src="__img__/index/ca1.png" alt="Thrid slide">
+                </div>
+            </div>
+        </div>
+        <div class="content clearfix">
+            <div class="login-nav clearfix">
+                <a class="navbar-brand" href="#"><img alt="Brand" src="__img__/index/logo.png"></a>
+                <a class="navbar-brand comName" href="#">智慧农业系统后台</a>
+            </div>
+            <div class="login-content clearfix">
+                <div class="login-info">
+                    <p>智慧农业平台欢迎你</p>
+                    <p>Welcome to wisdom agriculture platform</p>
+                </div>
+                <div class="login-inner">
+                    <h5 class="title">账号登录</h5>
+                    <form >
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                            <input id="username" type="text" class="form-control" name="username" class="username" placeholder="请输入用户名">
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                            <input type="password" id="password" name="password" class="form-control" class="password" placeholder="请输入密码">
+                        </div>
+                       <!--  <br> -->
+                 <!--        <div class="checkbox passInfo clearfix">
+                            <label>
+                                <input type="checkbox" name="">记住密码
+                            </label>
+                            <div class="forgetPass"><a>忘记密码</a></div>
+                        </div> -->
+                        <br>
+                <button id="login"  type="button"  class="btn button-login"  onclick="loginsystem()">登录</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="link-info">
+                <div class="row">
+                    <div class="col-sm-4 clearfix">
+                        <img src="__img__/index/lQQ.png" alt="QQ">
+                        <p>QQ:928174690</p>
+                    </div>
+                    <div class="col-sm-4 clearfix">
+                        <img src="__img__/index/lman.png" alt="phone">
+                        <p>电话:400-600-8967</p>
+                    </div>
+                    <div class="col-sm-4 clearfix">
+                        <img src="__img__/index/fmail.png" alt="mail">
+                        <p>邮箱：toocle01@netsun.com</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    
+</body>
+    <!-- Mainly scripts -->
+    <script src="__js__/jquery-3.1.1.min.js"></script>
+    <script src="__js__/bootstrap.min.js"></script>
+    <script src="__js__/layer/layer.js"></script>
+    <script src="__js__/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="__js__/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- Custom and plugin javascript -->
+    <!-- <script src="__js__/inspinia.js"></script> -->
+    <script src="__js__/plugins/pace/pace.min.js"></script>
+    <!-- jQuery UI -->
+    <script src="__js__/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Toastr -->
+    <script src="__js__/plugins/toastr/toastr.min.js"></script>
+
+    <script type="text/javascript">
+      document.onkeydown=function(event){
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+            if(e && e.keyCode==27){ // 按 Esc 
+                //要做的事情
+                alert('让你不要按Esc键盘，ok？');
+              }
+            if(e && e.keyCode==113){ // 按 F2 
+                 //要做的事情
+                 alert('就问你没事按F2干嘛？？？');
+               }            
+             if(e && e.keyCode==13){ // enter 键
+                 //要做的事情
+                        var username = $("#username").val();
+                        var password = $("#password").val();
+                        $.ajax({
+                            url: '{:url("admin/login/login")}',
+                            type: 'post',
+                            dataType: 'json',
+                            data: {username: username,password:password},
+                        })
+                        .done(function(data) {
+                            if(data.code==1){
+                                layer.msg(data.msg,{icon:1,time:1000},function(){
+                                    window.location.href=data.url;
+                                })
+                            }else{
+                                    layer.msg(data.msg,{icon:2,time:1000});
+                                }
+                        })
+            }
+        }; 
+    function loginsystem(){
+        var username = $("#username").val();
+        var password = $("#password").val();
+        $.ajax({
+            url: '{:url("admin/login/login")}',
+            type: 'post',
+            dataType: 'json',
+            data: {username: username,password:password},
+        })
+        .done(function(data) {
+            if(data.code==1){
+                layer.msg(data.msg,{icon:1,time:1000},function(){
+                    window.location.href=data.url;
+                })
+            }else{
+                layer.msg(data.msg,{icon:2,time:1000});
+            }
+
+        })
+    } 
+    </script>
+</html>

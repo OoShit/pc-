@@ -1,0 +1,114 @@
+{extend name="base"}
+{block name="css" }{/block}
+
+{block name="content"}
+
+<style type="text/css">
+    .well{
+        margin-top: 103px;
+    }
+</style>
+<div class="well">
+    <input  type="text" class="span3" style="margin: 0 auto;"  data-provide="typeahead" data-items="4" id="search">
+</div>
+<!-- <ul class="typeahead dropdown-menu" style="top: 150px; left: 20px; display: block;"><li data-value="PHP" class="active"><a href="#"><strong>PH</strong>P</a></li></ul> -->
+<div style="margin-top: 150px;margin-left: 50px;">
+    
+ 自动补全实例  &nbsp; <input type="text" name="nope" id="nope" placeholder="Crayola colors" maxlength="40" />
+</div>
+  
+{/block}
+{block name="js" }
+<!-- <script src="__js__/jquery.autocompleter.js"></script> -->
+<script src="__js__/bootstrap-typeahead.js"></script>
+{/block}
+{block name="script"}
+<script>
+/**
+ * Crayola colors in JSON format
+ * from: https://gist.github.com/jjdelc/1868136
+ */
+ var subjects = ['PHP', 'MySQL', 'SQL', 'PostgreSQL', 'HTML', 'CSS', 'HTML5', 'CSS3', 'JSON']; 
+ $('#search').typeahead({
+    source: subjects,
+    items:10
+    });
+ 
+var colors =
+[
+    {
+        "hex": "#EFDECD",
+        "label": "Almond",
+        "rgb": "(239, 222, 205)"
+    },
+    {
+        "hex": "#CD9575",
+        "label": "Antique Brass",
+        "rgb": "(205, 149, 117)"
+    },
+    {
+        "hex": "#FDD9B5",
+        "label": "Apricot",
+        "rgb": "(253, 217, 181)"
+    },
+    {
+        "hex": "#78DBE2",
+        "label": "Aquamarine",
+        "rgb": "(120, 219, 226)"
+    },
+    {
+        "hex": "#87A96B",
+        "label": "Asparagus",
+        "rgb": "(135, 169, 107)"
+    },
+    {
+        "hex": "#FFA474",
+        "label": "Atomic Tangerine",
+        "rgb": "(255, 164, 116)"
+    },
+    {
+        "hex": "#FAE7B5",
+        "label": "Banana Mania",
+        "rgb": "(250, 231, 181)"
+    },
+    {
+        "hex": "#9F8170",
+        "label": "Beaver",
+        "rgb": "(159, 129, 112)"
+    },
+  
+];
+
+// $(function () {
+//   $('#nope').autocompleter({
+//         // marker for autocomplete matches
+//         highlightMatches: true,
+
+//         // object to local or url to remote search
+//         source: colors,
+
+//         // custom template
+//         template: '{{ label }} <span>({{ hex }})</span>',
+
+//         // show hint
+//         hint: true,
+
+//         // abort source if empty field
+//         empty: false,
+
+//         // max results
+//         limit: 5,
+//         callback: function (value, index, selected) {
+//             console.log(value);
+//             if (selected) {
+//                 $('.icon').css('background-color', selected.hex);
+//             }
+//         }
+//     });
+// });
+</script>
+{/block}
+
+
+
+

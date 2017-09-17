@@ -1,0 +1,55 @@
+{extend name="base" /}
+{block name="content"}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="row gray-bg">
+
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i>平台管理</a></li>
+            <li><a href="" class="active">五河农业园区</a></li>
+        </ol>
+    </div>
+    <div class="row park-wrapper">
+        <h4 class="park-title">五河农业园区</h4>
+        <div class="contain">
+            <ul id="park-tab" class="nav nav-tabs">
+                <li class="">
+                    <a href="#a1" data-toggle="tab">基本信息</a>
+                </li>
+                <li class="">
+                    <a href="#a2" data-toggle="tab">公司信息</a>
+                </li>
+                <li class="active">
+                    <a href="#a3" data-toggle="tab">园区地块</a>
+                </li>
+            </ul>
+            <div id="park-tabContent" class="tab-content">
+                <div id="a1" class="tab-pane fade">
+                    a1
+                </div>
+                <div id="a2" class="tab-pane fade">
+                    a2
+                </div>
+                <div id="a3" class="tab-pane fade in active">
+                    <div  id="table-wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                        <table id="park-info" class="table table-striped table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>英文名</th>
+                                <th>编号</th>
+                                <th>品种</th>
+                                <th>规格</th>
+                                <th>负责人</th>
+                                <th>负责人电话</th>
+                                <th>负责人邮箱</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

@@ -1,0 +1,64 @@
+{extend name="base" /} {block name="content"}
+<style type="text/css">
+/*质量溯源*/
+#wrapper{
+    height: 100%;
+}
+#wrapper .content{
+    height: 100%;
+    margin-top: 0px;
+}
+#page-wrapper.quality_bg {
+    padding: 0px;
+    background: url(__img__/Quality_bg.png) no-repeat fixed;
+    height: 100%;
+    min-height: inherit;
+}
+.box-content{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 680px;
+    height: 200px;
+    margin-left: -340px;
+    margin-top: -100px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 8px;
+}
+.box-content form{
+     width: 500px;
+     margin: 0 auto;
+     margin-top: 70px;
+}
+.box-content form .form-control{
+    height: 50px;
+    border-radius: 6px;
+}
+.box-content form .input-group{
+   box-shadow: 2px 2px 20px #6f7775;
+}
+.box-content form .input-group .input-group-addon{
+    background: #00b28b;
+    padding: 6px 30px;
+    color: #ffffff;
+    font-size: 16px;
+    border: 1px solid #00b28b;
+    border-radius: 3px;
+}
+</style>
+<div id="page-wrapper" class="gray-bg quality_bg">
+   <div class="box-content">
+       <form role="form">
+           <div class="input-group">
+           <input type="text" name="" class="form-control" placeholder="请输入产品识别码">
+               <span class="input-group-addon">查询</span>
+           </div>
+       </form>
+   </div>
+</div>
+<!-- #page-wrapper -->
+{/block} {block name="js"}
+<script type="text/javascript">
+// $('#page-wrapper').height($(document.body).height() - 88);
+</script>
+{/block}

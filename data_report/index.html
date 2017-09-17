@@ -1,0 +1,793 @@
+{extend name="base" /}
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__css__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css"> {/block}
+{block name="content"}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="row gray-bg">
+        <ol class="breadcrumb">
+            <li><a href="#" class="active"><i class="fa fa-home"></i>数据报表</a></li>
+        </ol>
+    </div>
+    <div class="row park-wrapper">
+    </div>
+    <div class="row">
+        <div class="select-wrapper">
+            <form role="form" class="form-inline clearfix">
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>设备类型</span>
+                        <i ></i>
+                    </div>
+                    <ul class="doubleLi clearfix" id="a_et">
+                        {volist name='equiptype' id='vo'}
+                        <li id="a{$vo.id}" class="" onclick="getNeedInfo(this)"><img src="{$vo.image}">{$vo.name_ch}</li>
+                        {/volist}
+                        <!--<li><img src="__img__/index/a3.jpg">二氧化碳浓度</li>-->
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>园区</span>
+                        <i ></i>
+                    </div>
+                    <ul id="a_park">
+
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>公司</span>
+                        <i ></i>
+                    </div>
+                    <ul id="a_company">
+
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>地块</span>
+                        <i ></i>
+                    </div>
+                    <ul id="a_land">
+
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>传感器</span>
+                        <i ></i>
+                    </div>
+                    <ul id="a_equip">
+
+                    </ul>
+                </div>
+                <button type="button" onclick="choose('a')" class="btn btn-success btn-xs" style="margin-left: 30px;margin-top: 7px;float: left;">添加选择</button>
+                <!--<button class="btn btn-primary Research" type="button" onclick="showTable('a')">查 看</button>-->
+            </form>
+        </div>
+    </div>
+    <div class="row park-wrapper">
+        <div class="col-md-3">
+            <div class="sbox">
+                <div class="sbox-header">已选记录</div>
+                <div class="sbox-content">
+                    <div class="record-list no-record" id="a_record">
+                        <img src="__img__/tools/noRecord.png">
+                        <span>暂无选择记录</span><br/>
+                        <span>最多同时选择"4"个传感器</span>
+                        <button class="btn btn-primary btn-xs" type="button" style="position:absolute; bottom:5px; right:35px;" onclick="showDiffData('a','a','')">生成图表</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="sbox">
+                <div class="sbox-content">
+                    <div class="row">
+                        <div class="col-md-2 time-select">
+                            <ul class="half-round Tselect-date">
+                                <li class="active" onclick="showDiffData('a','a','')">当日</li>
+                                <li onclick="showDiffData('a','b','')">七天</li>
+                                <li onclick="showDiffData('a','c','')">15天</li>
+                                <li class="time-picker">自定义
+                                    <div class="timePicker-box" id="a_time">
+                                        <div class="Picker-select">
+                                            <span>从</span>
+                                            <input type="text" name="startTime" placeholder="开始时间" id="startTime1" disabled="disabled">
+                                            <span>到</span>
+                                            <input type="text" name="endTime" placeholder="结束时间" id="endTime1" disabled="disabled">
+                                            <button class="btn btn-sm cancel">取消</button>
+                                            <button class="btn btn-sm btn-primary ensure" onclick="showDiffData('a',$('#startTime1').val()+','+$('#endTime1').val(),'')">确定</button>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="startTime-picker" data-date-format="dd-mm-yyyy"></div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="endTime-picker"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="half-round Tselect-sure">
+                                <li class="drop-down"><span id="a_type">具体值</span><img src="__img__/icon/greyDown.png">
+                                    <ul>
+                                        <li class="active" onclick="getNeedAttr(this,'a')">具体值</li>
+                                        <li onclick="getNeedAttr(this,'a')">时平均</li>
+                                        <li onclick="getNeedAttr(this,'a')">日平均</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-10">
+                            <div id="a_main" style="width: 1100px;height: 230px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="select-wrapper">
+            <form role="form" class="form-inline clearfix">
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>设备类型</span>
+                        <i ></i>
+                    </div>
+                   <ul class="doubleLi clearfix" id="b_et">
+                       {volist name='equiptype' id='vo'}
+                       <li id="b{$vo.id}" onclick="getNeedInfo(this)"><img src="{$vo.image}">{$vo.name_ch}</li>
+                       {/volist}
+                        <!--<li><img src="__img__/index/a3.jpg">二氧化碳浓度</li>-->
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>园区</span>
+                        <i ></i>
+                    </div>
+                    <ul id="b_park">
+
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>公司</span>
+                        <i ></i>
+                    </div>
+                    <ul id="b_company">
+
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>地块</span>
+                        <i ></i>
+                    </div>
+                    <ul id="b_land">
+
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>传感器</span>
+                        <i ></i>
+                    </div>
+                    <ul id="b_equip">
+
+                    </ul>
+                </div>
+                <button type="button" onclick="choose('b')" class="btn btn-success btn-xs" style="margin-left: 30px;margin-top: 7px;float: left;">添加选择</button>
+                <!--<button class="btn btn-primary Research" type="button" onclick="showTable('b')">查 看</button>-->
+            </form>
+        </div>
+    </div>
+    <div class="row park-wrapper">
+        <div class="col-md-3">
+            <div class="sbox">
+                <div class="sbox-header">已选记录</div>
+                <div class="sbox-content">
+                    <div class="record-list no-record" id ='b_record'>
+                         <img src="__img__/tools/noRecord.png">
+                         <span>暂无选择记录</span><br/>
+                         <span>最多同时选择"4"个传感器</span>
+                        <button class="btn btn-primary btn-xs" type="button" style="position:absolute; bottom:5px; right:35px;" onclick="showDiffData('b','a','')">生成图表</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="sbox">
+                <div class="sbox-content">
+                    <div class="row">
+                        <div class="col-md-2 time-select">
+                            <ul class="half-round Tselect-date">
+                                <li class="active" onclick="showDiffData('b','a','')">当日</li>
+                                <li onclick="showDiffData('b','b','')">七天</li>
+                                <li onclick="showDiffData('b','c','')">15天</li>
+                                <li class="time-picker">自定义
+                                    <div class="timePicker-box" id="b_time">
+                                        <div class="Picker-select">
+                                            <span>从</span>
+                                            <input type="text" name="startTime" placeholder="开始时间" id="startTime2" disabled="disabled">
+                                            <span>到</span>
+                                            <input type="text" name="endTime" placeholder="结束时间" id="endTime2" disabled="disabled">
+                                            <button class="btn btn-sm cancel">取消</button>
+                                            <button class="btn btn-sm btn-primary ensure" onclick="showDiffData('b',$('#startTime2').val()+','+$('#endTime2').val(),'')">确定</button>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="startTime-picker2" data-date-format="dd-mm-yyyy"></div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="endTime-picker2"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="half-round Tselect-sure">
+                                <li class="drop-down"><span id="b_type">具体值</span><img src="__img__/icon/greyDown.png">
+                                    <ul>
+                                        <li class="active" onclick="getNeedAttr(this,'b')">具体值</li>
+                                        <li onclick="getNeedAttr(this,'b')">时平均</li>
+                                        <li onclick="getNeedAttr(this,'b')">日平均</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-10">
+                            <div id="b_main" style="width: 1100px;height:230px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input id="a_equipid" type="hidden">
+<input id="a_equiptype" type="hidden">
+<input id="a_time_range" type="hidden">
+<input id="a_type_name" type="hidden">
+<input id="a_park_name" type="hidden">
+<input id="a_company_name" type="hidden">
+<input id="a_land_name" type="hidden">
+<input id="a_equip_name" type="hidden">
+
+<input id="b_equipid" type="hidden">
+<input id="b_equiptype" type="hidden">
+<input id="b_time_range" type="hidden">
+<input id="b_type_name" type="hidden">
+<input id="b_park_name" type="hidden">
+<input id="b_company_name" type="hidden">
+<input id="b_land_name" type="hidden">
+<input id="b_equip_name" type="hidden">
+<!-- #page-wrapper -->
+{/block} {block name="js"}
+<script src="__js__/echarts.js"></script>
+<script src="__js__/jquery.cookie.js"></script>
+<script src="__js__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="__js__/plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+//获取含此设备类型的园区信息
+function getNeedInfo(obj){
+    var type_id = $(obj).attr('id');
+    var str = type_id.substr(0,1);
+    var id = type_id.substr(1);
+    var li = '';
+    $('#'+str+'_type_name').val($(obj).text());
+    /*if(str == 'a'){
+        $("li[id^='b']").css('color','black');
+        $('#b'+id+'').css('color','red');
+    }else if(str == 'b'){
+        $("li[id^='a']").css('color','black');
+        $('#a'+id+'').css('color','red');
+    }*/
+    //根据选中项的字体颜色判断是否为重复选择
+    /*var color = $(obj).css('color');*/
+    //alert(color);
+   /* if(color != 'rgb(255, 0, 0)'){*/
+    $.when(
+        $.ajax({
+            url: "{:url('admin/DataReport/getParkInfo')}",
+            type: 'post',
+            dataType: 'json',
+            data: {type_id: id},
+            success:function(data){
+                $('#'+str+'_company').children(li).remove();
+                $('#'+str+'_land').children(li).remove();
+                $('#'+str+'_equip').children(li).remove();
+                $('#'+str+'_equipid').val('');
+                $('#'+str+'_equipname').val('');
+                //console.log(data);
+                if(data != ''){
+                    $.each(data, function(k,v){
+                        if(str == 'a') {
+                            li += '<li id="a_p' + v.id + '" value="' + v.type_id + '" onclick="getNeedComInfo(this)">' + v.name + '</li>';
+                        }else{
+                            li += '<li id="b_p'+ v.id+'" value="'+ v.type_id+'" onclick="getNeedComInfo(this)">'+v.name+'</li>';
+                        }
+                    });
+                    $('#'+str+'_park').parent().children('.selectUI-text').children('span').text('园区');
+                    $('#'+str+'_company').parent().children('.selectUI-text').children('span').text('公司');
+                    $('#'+str+'_land').parent().children('.selectUI-text').children('span').text('地块');
+                    $('#'+str+'_equip').parent().children('.selectUI-text').children('span').text('传感器');
+                    $('#'+str+'_park').html(li);
+                }else{
+                    $('#'+str+'_equiptype').val('');
+                    $('#'+str+'_park').parent().children('.selectUI-text').children('span').text('园区');
+                    $('#'+str+'_company').parent().children('.selectUI-text').children('span').text('公司');
+                    $('#'+str+'_land').parent().children('.selectUI-text').children('span').text('地块');
+                    $('#'+str+'_equip').parent().children('.selectUI-text').children('span').text('传感器');
+                    $('#'+str+'_park').html('<li>无</li>');
+                }
+            }
+        })
+    ).done(function(){
+        $('.selectUI ul li').on('click', function(event) {
+            $(this).closest('.selectUI').find('.selectUI-text').children('span').html($(this).html());
+        });
+    });
+    /*}else{
+        layer.msg('不可重复选择同一设备类型', {
+            icon: 2,
+            time: 2000
+        })
+    }*/
+}
+    //根据设备类型和园区ID查公司
+function getNeedComInfo(obj){
+    var p_id_str = $(obj).attr('id');
+    var type_id = $(obj).val();
+    var str = p_id_str.substr(0,1);
+    var park_id = p_id_str.substr(3);
+    var li = '';
+    $('#'+str+'_park_name').val($(obj).text());
+    $.when(
+        $.ajax({
+            url: "{:url('admin/DataReport/getComInfo')}",
+            type: 'post',
+            dataType: 'json',
+            data: {type_id: type_id,park_id: park_id},
+            success:function(data){
+                $('#'+str+'_land').children(li).remove();
+                $('#'+str+'_equip').children(li).remove();
+                //console.log(data);
+                $.each(data, function(k,v){
+                    if(str == 'a') {
+                        li += '<li id="a_c' + v.id + '" value="' + v.type_id + '" onclick="getNeedLandInfo(this)">' + v.name + '</li>';
+                    }else{
+                        li += '<li id="b_c'+ v.id+'" value="'+ v.type_id+'" onclick="getNeedLandInfo(this)">'+v.name+'</li>';
+                    }
+                });
+                $('#'+str+'_company').parent().children('.selectUI-text').children('span').text('公司');
+                $('#'+str+'_land').parent().children('.selectUI-text').children('span').text('地块');
+                $('#'+str+'_equip').parent().children('.selectUI-text').children('span').text('传感器');
+                $('#'+str+'_company').html(li);
+            }
+        })
+    ).done(function(){
+        $('.selectUI ul li').on('click', function(event) {
+            $(this).closest('.selectUI').find('.selectUI-text').children('span').html($(this).html());
+        });
+    });
+}
+    //根据设备类型和公司ID查地块
+function getNeedLandInfo(obj){
+    var c_id_str = $(obj).attr('id');
+    var type_id = $(obj).val();
+    var str = c_id_str.substr(0,1);
+    var company_id = c_id_str.substr(3);
+    var li = '';
+    $('#'+str+'_company_name').val($(obj).text());
+    $.when(
+        $.ajax({
+            url: "{:url('admin/DataReport/getLandInfo')}",
+            type: 'post',
+            dataType: 'json',
+            data: {type_id: type_id,company_id: company_id},
+            success:function(data){
+                $('#'+str+'_equip').children(li).remove();
+                //console.log(data);
+                $.each(data, function(k,v){
+                    if(str == 'a') {
+                        li += '<li id="a_l' + v.id + '" value="' + v.type_id + '" onclick="getNeedEquipInfo(this)">' + v.name + '</li>';
+                    }else{
+                        li += '<li id="b_l'+ v.id+'" value="'+ v.type_id+'" onclick="getNeedEquipInfo(this)">'+v.name+'</li>';
+                    }
+                });
+                $('#'+str+'_land').parent().children('.selectUI-text').children('span').text('地块');
+                $('#'+str+'_equip').parent().children('.selectUI-text').children('span').text('传感器');
+                $('#'+str+'_land').html(li);
+            }
+        })
+    ).done(function(){
+        $('.selectUI ul li').on('click', function(event) {
+            $(this).closest('.selectUI').find('.selectUI-text').children('span').html($(this).html());
+        });
+    });
+}
+    //根据设备类型和地块ID查传感器
+function getNeedEquipInfo(obj){
+    var l_id_str = $(obj).attr('id');
+    var type_id = $(obj).val();
+    var str = l_id_str.substr(0,1);
+    var land_id = l_id_str.substr(3);
+    var li = '';
+    $('#'+str+'_land_name').val($(obj).text());
+    $.when(
+        $.ajax({
+            url: "{:url('admin/DataReport/getEquipInfo')}",
+            type: 'post',
+            dataType: 'json',
+            data: {type_id: type_id,land_id: land_id},
+            success:function(data){
+                console.log(data);
+                $.each(data, function(k,v){
+                    if(str == 'a') {
+                        li += '<li id="a_e' + v.id + '" value="' + v.equiptype_id + '" onclick="saveInfo(this)">' + v.name + '</li>';
+                    }else{
+                        li += '<li id="b_e'+ v.id+'" value="'+ v.equiptype_id+'" onclick="saveInfo(this)">'+v.name+'</li>';
+                    }
+                });
+                $('#'+str+'_equip').parent().children('.selectUI-text').children('span').text('传感器');
+                $('#'+str+'_equip').html(li);
+            }
+        })
+    ).done(function(){
+        $('.selectUI ul li').on('click', function(event) {
+            $(this).closest('.selectUI').find('.selectUI-text').children('span').html($(this).html());
+        });
+    });
+}
+    //存储设备类型ID 和 传感器ID
+function saveInfo(obj){
+    var e_id_str = $(obj).attr('id');
+    var type_id = $(obj).val();
+    var str = e_id_str.substr(0,1);
+    var equip_id = e_id_str.substr(3);
+    $('#'+str+'_equip_name').val($(obj).text());
+    $('#'+str+'_equipid').val(equip_id);
+    $('#'+str+'_equiptype').val(type_id);
+}
+
+//添加选择项到指定div
+function choose(str){
+    var equip_id = $('#'+str+'_equipid').val();
+    var equiptype = $('#'+str+'_equiptype').val();
+    if(equip_id==''){
+        layer.msg('请先选择传感器再进行添加', {
+            icon: 7,
+            time: 2000
+        });
+        return false;
+    }
+    var add_str = $('#'+str+'_type_name').val()+'-'+$('#'+str+'_park_name').val()+'-'+$('#'+str+'_company_name').val()+'-'+$('#'+str+'_land_name').val()+'-'+$('#'+str+'_equip_name').val()+'('+$('#'+str+'_equipid').val()+')';
+    var div = '<div class="record-li" id="'+equip_id+'" value="'+equiptype+'"><i></i><a>'+add_str+'</a><span onclick="closediv(this)" class="close-record fa fa-times"></span></div>';
+    var record = $('#'+str+'_record');
+    if(record.children('img').length>0){
+        record.children('img').remove();
+        record.children('span').remove();
+        record.children('br').remove();
+        record.attr('class','record-list');
+        record.append(div);
+        $('#'+str+$('#'+str+'_equiptype').val()).css('color','red');
+    }else{
+        var record_li = record.children('.record-li');
+        var his_type = record_li.eq(0).attr('value');
+        //一次最多添加4个传感器，判断是否超出限制
+        if(record_li.length == 4){
+            layer.msg('最多同时选择"4"个传感器', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        //判断新添传感器是否已在记录中
+        try{
+            $.each(record_li,function(){
+                if(add_str == $(this).text()){
+                    throw "此传感器已在记录中";
+                    return;
+                }
+            });
+        }catch(e){
+            layer.msg(e, {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        //判断新添加传感器与记录中传感器类型是否一致
+        if(equiptype != his_type){
+            layer.msg('只可选择同类型传感器进行数据对比', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        record.append(div);
+
+        if($('#'+str+'_main').children().length>0){
+            var time_range = $('#'+str+'_time_range').val();
+            showDiffData(str,time_range,'')
+        }
+    }
+}
+//根据选中的传感器获取   对比数据图
+function showDiffData(str,time_range,value_type){
+    var par = $('#'+str+'_record').children('.record-li');
+    var type_id = par.attr('value');
+    var equip_id = '';
+    par.each(function(){
+        equip_id += $(this).attr("id")+',';
+    });
+    //获取选中的传感器ID
+    equip_id=equip_id.substring(0,equip_id.length-1);
+    if(equip_id==''){
+        layer.msg('尚未选择传感器', {
+            icon: 7,
+            time: 2000
+        });
+        return
+    }
+    //alert(equip_id);
+    //var x_data = [];
+    //var y_data = [];
+    var series_y = [];
+    var data_x = [];
+    var data_y = [];
+    if(time_range!='a' && time_range!='b' && time_range!='c'){
+        var arr = time_range.split(",");
+        if(arr[0]=='' || arr[1] == ''){
+            layer.msg('请选择开始和结束时间', {
+                icon: 7,
+                time: 2000
+            });
+            return
+        }
+    }
+    $('#'+str+'_time_range').val(time_range);
+    if(value_type == ''){
+        value_type = ($('#'+str+'_type').text());
+    }
+    $.ajax({
+        url: "{:url('admin/DataReport/getEquipData')}",
+        type: 'post',
+        dataType: 'json',
+        data: {equip_id: equip_id,type_id: type_id,time_range: time_range,value_type: value_type},
+        success:function(data){
+            //console.log(data);
+            $('#'+str+'_time').css('display','none');
+            var len = data.length;
+            var name = [];
+            for(var i = 0;i<len-1;i++){
+                var x_data = [];
+                var y_data = [];
+                name.push(data[i][0]['name']+'('+data[i][0]['id']+')');
+                $.each(data[i][1],function(k,v){
+                    x_data.push(v.recordtime);
+                    y_data.push(v.equipdata);
+                });
+                data_x[i] = x_data;
+                data_y[i] = y_data;
+                //series_y.push({name: data[i][0]['name'], type: 'line', data: y_data});
+            }
+            //选择含有recordtime最多的作为x轴  时间显示
+            var len_x = data_x.length;
+            var new_x_data = [];
+            if(len_x>1){
+                for(var m = 1;m<len_x;m++){
+                    if(data_x[m-1].length>data_x[m].length){
+                        data_x[m]=data_x[m-1];
+                    }
+                    new_x_data = data_x[m];
+                }
+            }else{
+                new_x_data = data_x[0];
+            }
+            //若多条y轴数据  长度不一致、将短 的 以‘-’补齐 ，再将补齐后的数组赋予   图表显示
+            var len_y = data_y.length;
+            if(len_y>1){
+                for(var n = 1;n<len_y;n++){
+                    if(data_y[n-1].length>data_y[n].length){
+                        var cha_1 = (data_y[n-1].length)-(data_y[n].length);
+                        for(var j=0;j<cha_1;j++){
+                            data_y[n].unshift('-');
+                        }
+                    }else if(data_y[n-1].length<data_y[n].length){
+                        var cha_2 = (data_y[n].length)-(data_y[n-1].length);
+                        if(n-1>0){
+                            var z = n-1;
+                            for(var p=1;p<z+2;p++){
+                                for(var q=0;q<cha_2;q++){
+                                    data_y[n-p].unshift('-');
+                                }
+                            }
+                        }else{
+                            for(var k=0;k<cha_2;k++){
+                                data_y[n-1].unshift('-');
+                            }
+                        }
+                    }
+                }
+            }
+            //console.log(data_y);
+            for(var h=0;h<len_y;h++){
+                series_y.push({name: data[h][0]['name']+'('+data[h][0]['id']+')', type: 'line', data: data_y[h]});
+            }
+            if(str == 'a'){
+                window.myChart = echarts.init(document.getElementById('a_main'));
+            }else{
+                window.myChart = echarts.init(document.getElementById('b_main'));
+            }
+            // 填入数据
+            //alert(x_data);
+            //alert(y);
+            myChart.setOption({
+                xAxis: {
+                    type: 'category',
+                    name: '时间',
+                    splitLine: {show: true},
+                    splitNumber:6,
+                    data: new_x_data //['2017-02-28 09:50:01','2017-02-28 09:50:01','2017-02-28 09:50:01','2017-02-28 09:50:01']
+                },
+                yAxis: {
+                    type: 'value',
+                    name: data[len-1]['value_unit']
+
+                },
+                legend: {
+                    left: 'left',
+                    data: name,
+                },
+                series: series_y,
+                title: {
+                    text: data[len-1]['name_ch'],
+                    left: 'center'
+                },
+                //数据提示框配置
+                tooltip: {
+                    trigger: 'axis',
+                    //formatter: '{a} <br/>{b} <br/> 值 {c}'
+                },
+                //工具箱配置
+                toolbox: {
+                    show : true,
+                    feature : {
+                        mark : {show: true}, // 辅助线标志，上图icon左数1/2/3，分别是启用，删除上一条，删除全部
+                        dataView : {show: true, readOnly: true},// 数据视图，上图icon左数8，打开数据视图
+                        magicType : {show: true, type: ['line', 'bar']},// 图表类型切换，当前仅支持直角系下的折线图、柱状图转换，上图icon左数6/7，分别是切换折线图，切换柱形图
+                        restore : {show: false}, // 还原，复位原始图表，上图icon左数9，还原
+                        saveAsImage : {show: true} // 保存为图片，上图icon左数10，保存
+                    }
+                },
+                //数据区域缩放
+                dataZoom: {
+                    show: true,
+                    start : 70
+                },
+                grid: {
+                    left: '3%',
+                    right: '9%',
+                    bottom: '3%',
+                    containLabel: true
+                }
+            });
+        }
+    });
+}
+//选择呈现的数据类型   具体值/时均值/日均值
+function getNeedAttr(obj,str){
+    var time_range = $('#'+str+'_time_range').val();
+    var value_type = $(obj).text();
+    showDiffData(str,time_range,value_type);
+}
+</script>
+<script>
+    $('.selectUI').on('click', function(event) {
+        event.preventDefault();
+        $(this).toggleClass('unfold').find('ul').toggle();
+    });
+    $('.selectUI ul li').on('click', function(event) {
+        $(this).closest('.selectUI').find('.selectUI-text').children('span').html($(this).html());
+    });
+
+   $('.Tselect-date').on('click','li',function(event){
+    $(this).toggleClass('active').siblings().removeClass('active');
+    $(this).siblings().find('.timePicker-box').hide();
+    if ($(this).hasClass('time-picker')) {
+        if (event.target == this) {
+            $(this).find('.timePicker-box').toggle();
+            // $(this).closest('.time-select').find('.drop-down ul').hide();
+        }
+    }
+
+    $(document).one('click',function(){
+        $('.time-picker').removeClass('active').find('.timePicker-box').hide();
+    })
+    event.stopPropagation();
+
+    $(this).closest('.time-select').find('.drop-down ul').hide();
+});
+$('.timePicker-box').on('click',function(e){
+    e.stopPropagation();
+});
+
+$('.Tselect-sure').on('click','li',function(event){
+    $(this).toggleClass('active').siblings().removeClass('active');
+    if ($(this).hasClass('drop-down')) {
+        $(this).find('ul').toggle();
+        $(this).children('span').text($(this).find('ul li.active').text());
+    }
+
+})
+
+    function closediv(obj) {
+        var par = $(obj).parents('.record-list');
+        var str = par.attr('id').substr(0,1);
+        var len_main = $('#'+str+'_main').children().length;
+        $(obj).closest('.record-li').remove();
+        if(par.children('.record-li').length == 0){
+            $('#'+str+'_main').children().remove();
+            par.attr('class','record-list no-record');
+            var img = '<img src="__img__/tools/noRecord.png"> <span>暂无选择记录</span><br/><span>最多同时选择"4"个传感器</span>';
+            par.append(img);
+            $('#'+str+'_et').children('li').css('color','#676a6c');
+        }else if(len_main>0){
+            var time_range = $('#'+str+'_time_range').val();
+            showDiffData(str,time_range,'');
+        }
+    }
+    $('.timePicker-box .cancel').on('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        $(this).closest('.timePicker-box').hide();
+
+    });
+    $('.startTime-picker').datetimepicker({
+        language: 'zh-CN',
+        format: 'yyyy-mm-dd',
+        weekStart: 1,
+        startView: 2,
+        minView: 2,
+        todayBtn: true,
+        linkField: "startTime1",
+        linkFormat: 'yyyy-mm-dd'
+    });
+    $('.endTime-picker').datetimepicker({
+        language: 'zh-CN',
+        format: 'yyyy-mm-dd',
+        weekStart: 1,
+        startView: 2,
+        minView: 2,
+        todayBtn: true,
+        linkField: "endTime1",
+        linkFormat: 'yyyy-mm-dd'
+    });
+    $('.startTime-picker2').datetimepicker({
+        language: 'zh-CN',
+        format: 'yyyy-mm-dd',
+        weekStart: 1,
+        startView: 2,
+        minView: 2,
+        todayBtn: true,
+        linkField: "startTime2",
+        linkFormat: 'yyyy-mm-dd'
+    });
+    $('.endTime-picker2').datetimepicker({
+        language: 'zh-CN',
+        format: 'yyyy-mm-dd',
+        weekStart: 1,
+        startView: 2,
+        minView: 2,
+        todayBtn: true,
+        linkField: "endTime2",
+        linkFormat: 'yyyy-mm-dd'
+    });
+</script>
+{/block}

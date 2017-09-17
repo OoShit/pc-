@@ -1,0 +1,193 @@
+{extend name="base" /}
+{block name="content"}
+<style type="text/css">
+    /*质量溯源*/
+   *{
+    padding:0;
+    margin:0;
+   }
+    .z_quality{
+        width:1000px;
+        height:700px;
+        position:absolute;
+        top:50%;
+        left:50%;
+        margin-top:-300px;
+        margin-left:-500px;
+        border-radius: 15px;
+        border:3px solid #9f9e9e;
+    }
+    .z_member{
+        width:200px;
+        height:100%;
+        background: #fce5cd;
+        border-radius: 15px 0 0 15px;
+        position:absolute;
+        top:0;
+        left:0;
+    }
+    .z_member ul li{
+        list-style: none;
+        display: inline-block;
+        width:76px;
+        height:50px;
+        border:1px solid #666;
+        border-radius:10px;
+        margin:8px;
+        text-align: center;
+        line-height: 50px;
+        font-style: italic;
+        font-size: 12px;
+        color:gray;
+        overflow: hidden;
+    }
+    .z_title{
+        padding:10px;
+        border-bottom:2px solid #fff;
+        text-align: center;
+    }
+    
+    .z_title,.z_member ul li{
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    .z_content{
+        width:894px;
+        height:100%;
+    }
+    .z_chat{
+        width:794px;
+        height:600px;
+        position: absolute;
+        background: #ccc;
+        border-radius: 0 10px 0 0;
+        top:0;
+        right:0;
+        bottom:0;
+        overflow: auto;
+        padding:10px 20px 0;
+    }
+    .z_text{
+        width: 634px;
+        height: 94px;
+        resize:none;
+        position: absolute;
+        bottom:0;
+        left:200px;
+    }
+    .z_btn{
+        width:160px;
+        height: 94px;
+        position: absolute;
+        bottom:0;
+        right:0px;
+        outline: none;
+        border-radius: 0 0 10px 0;
+        font-size:20px;
+    }
+    .z_message{
+        width:100%;
+        padding:5px;
+        font-size: 16px;
+        color:#272727;
+        word-break:break-all;
+        background: #ACD9F8;
+    }
+    .z_time{
+        position: relative;
+        top:-5px;
+        left:0;
+        display: block;
+    }
+</style>
+
+<div id="z_wrapper" class="z_quality">
+    
+    <div class="z_member">
+        <h3 class="z_title">聊天成员</h3>
+        <ul>
+            <li>程序员Kevin</li>
+            <li>攻城狮David</li>
+            <li>颜值王Marke</li>
+            <li>软妹子Louise</li>
+        </ul>
+    </div>
+
+    <div class="z_content">
+
+        <div class="z_chat">
+            
+            <!-- 聊天内容存放处 -->
+
+        </div>
+        
+        <textarea class="z_text" id="z_send"></textarea>
+        <button class="z_btn" onclick="send()">发送</button>
+
+    </div>
+
+</div>
+    
+
+{/block}
+
+{block name="script"}
+
+<script type="text/javascript">
+
+    var wsServer = 'ws://192.168.16.148:9503';
+    var websocket = new WebSocket(wsServer);
+    websocket.onmessage = function (evt) {
+        console.log('Retrieved data from server: ' + evt.data);
+    };
+
+    // 获取当前时间
+    function currentTime(){
+        var time = new Date();
+        // 程序计时的月从0开始取值后+1
+        var m = time.getMonth() + 1;
+        var t = time.getFullYear() + "-" + m + "-"
+            + time.getDate() + " " + time.getHours() + ":"
+            + time.getMinutes() + ":" + time.getSeconds();
+        // show.innerHTML = t;
+            var $z_time = $("<i "+ 'class="z_time"'+"></i>");
+            $z_time.html(t);
+            $z_time.appendTo($(".z_chat"));
+    }
+
+    // 点击发送
+    function send(){
+        var message = $('#z_send').val();
+        message = $.trim(message);
+        if(message != ''){
+            websocket.send(message);
+            
+            // 创建一个新的标签并添加进页面中 
+            var $z_p = $("<p "+ 'class="z_message"'+"></p>");
+            $z_p.html(message);
+
+            currentTime();
+
+            $z_p.appendTo($(".z_chat"));
+            $(".z_text").val('');
+            // 设置聊天页面的滚动条始终在底部，显示最新的对话内容
+            $('.z_chat').scrollTop( $('.z_chat')[0].scrollHeight );
+        }
+        
+    }
+
+    // 回车键发送
+    document.onkeydown=function(e){
+        if (e.keyCode == 13 || e.keyCode == 108){
+           e.preventDefault();
+           send();
+        }
+        else{
+           return;
+        }
+    }
+
+</script>
+{/block}

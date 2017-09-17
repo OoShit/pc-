@@ -1,0 +1,191 @@
+{extend name="base" /} {block name="content"}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="row gray-bg">
+        <ol class="breadcrumb">
+            <li><a href="#" class="active"><i class="fa fa-home"></i>实时监控</a></li>
+        </ol>
+    </div>
+    <div class="row park-wrapper">
+        <h4 class="park-title">实时监控</h4>
+        <div class="contain">
+            <div class="select-wrapper">
+                <form role="form" class="form-inline">
+                    <select class="form-control">
+                        <option>请选择园区</option>
+                        <option value="1">dd</option>
+                    </select>
+                    <select class="form-control">
+                        <option>请选择公司</option>
+                        <option value="1">dd</option>
+                    </select>
+                    <select class="form-control">
+                        <option>请选择地块</option>
+                        <option value="1">dd</option>
+                    </select>
+                    <button class="btn btn-primary" type="submit">搜 索</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row park-wrapper">
+        <div class="col-md-6">
+            <div class="ibox border-all">
+                <div class="ibox-title">
+                    <h5>上海邦伯农业有限公司</h5>
+                    <div class="state-list clearfix">
+                        <div class="device-state"><img src="__img__/icon/damage.png" class="state-icon">设备损坏</div>
+                        <div class="device-state"><img src="__img__/icon/warning.png" class="state-icon">设备报警</div>
+                        <div class="device-state"><img src="__img__/icon/disconnect.png" class="state-icon">连接断开</div>
+                        <div class="device-state"><img src="__img__/icon/normal.png" class="state-icon">设备正常</div>
+                        
+                        
+                        
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <ul id="block-tab" class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#b1" data-toggle="tab">地块信息一</a>
+                        </li>
+                        <li class="">
+                            <a href="#b2" data-toggle="tab">地块信息二</a>
+                        </li>
+                        <li class="tab-more">
+                            <a href="javascript:void();" rel="nofollow" class="btn-more">更多<i></i></a>
+                        </li>
+                    </ul>
+                    <div class="blockName-list clearfix">
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a>地块信息一</a>
+                        <a class="all-block">全部地块<i class="fa fa-angle-right"></i></a>
+                    </div>
+                    <div id="block-tabContent" class="tab-content">
+                        <div id="b1" class="tab-pane fade in active">
+                            <table id="park-info" class="table table-hover">
+                                <thead class="gray-bg reset-vertical">
+                                    <tr>
+                                       <td><img src="__img__/icon/sum.png" class="monitor-icon">总数量:88</td>
+                                       <td><img src="__img__/icon/firingNum.png" class="monitor-icon">启动数量:66</td>
+                                       <td><img src="__img__/icon/Boltmonitoring.png" class="monitor-icon">枪机监控:44</td>
+                                       <td><img src="__img__/icon/Ballmonitoring.png" class="monitor-icon">球机监控:22</td>
+                                       <td class="text-right"> 
+                                          <a href='{:url('admin/RealtimeData/monitors')}' ><button type="button" class="btn btn-danger btn-sm margin-btn1">     
+                                            <img src="__img__/icon/control.png" class="icon-control" />监控
+                                          </button></a>
+                                        </td>
+                                    </tr>
+                                    
+                                </thead>
+                                <tbody class="reset-vertical">
+                                    <tr>
+                                        <td><img src="__img__/index/a3.jpg" class="senser-img">首部</td>
+                                        <td><span class="td-title">编号：</span>P098</td>
+                                        <td><span class="td-title">状态：</span>
+                                        <img src="__img__/icon/normal.png" class="state-icon icon-big"></td>
+                                        <td><span class="td-title">数值：</span>60%</td>
+                                        <td class="text-right">
+                                            <button type="button" class="btn btn-primary btn-sm">
+                                                <i class="fa fa-search" aria-hidden="true"></i>查看
+                                            </button>
+                                            <button type="button" class="btn btn-gray btn-sm">
+                                                <img src="__img__/icon/control.png" class="icon-control" />监控
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="__img__/index/a3.jpg" class="senser-img">首部</td>
+                                        <td><span class="td-title">编号：</span>P098</td>
+                                        <td><span class="td-title">状态：</span>
+                                        <img src="__img__/icon/damage.png" class="state-icon icon-big"></td>
+                                        <td><span class="td-title">数值：</span>60%</td>
+                                        <td class="text-right">
+                                            <button type="button" class="btn btn-primary btn-sm">
+                                                <i class="fa fa-search" aria-hidden="true"></i>查看
+                                            </button>
+                                            <button type="button" class="btn btn-gray btn-sm">
+                                                <img src="__img__/icon/control.png" class="icon-control" />监控
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="b2" class="tab-pane fade">
+                            <div class="btn-switch close">
+                                <div class="switch-out">
+                                    <div class="switch-inner"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="video-box">
+        <video src="__video__/1.mp4"></video>
+        <div class="video-play">
+            <img src="__img__/icon/player.png">
+        </div>
+        <div class="video-tools">
+        <img src="__img__/icon/setting.png" class="video-setting">
+        <img src="__img__/icon/close.png" class="video-close">
+
+        </div>
+    </div>
+</div><!-- #page-wrapper -->
+{/block} {block name="js"}
+<script type="text/javascript">
+'use strict';
+$(() => {
+    let $btn = $('.btn-more'),
+        $obj = $btn.closest('.ibox-content').find('.blockName-list');
+    $btn.hover(() => {
+        $obj.addClass('unfold');
+    }, (e) => {
+        if (e.toElement == $obj[0]) return;
+        $obj.removeClass('unfold');
+    });
+    $obj.mouseleave(function(e){
+        if(e.toElement == $btn[0]) return;
+        $(this).removeClass('unfold');
+    });
+
+   //控制播放器
+   $('.video-play').on('click',function(){
+      var myVideo =$(this).siblings('video');
+      $(this).hide();
+      myVideo[0].play();
+      myVideo.attr({
+          controls: 'controls'
+        });
+      myVideo[0].muted=true;
+   });
+   $('.video-close').on('click', function(event) {
+       event.preventDefault();
+       var par =$(this).parents('.video-box');
+       par.remove();
+   });
+   $('.video-setting').on('click',function(){
+      window.open("{:url('monitor')}");
+   })
+})
+</script>
+{/block}

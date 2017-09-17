@@ -1,0 +1,596 @@
+{extend name="base" /} {block name="css"}
+<link rel="stylesheet" type="text/css" href="__css__/productionControl.css">
+<link rel="stylesheet" type="text/css" href="__css__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css">
+{/block} {block name="content"}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="row gray-bg marTop">
+        <ol class="breadcrumb">
+            <li><a href="#" class="active"><i class="fa fa-home"></i>创建生产计划</a></li>
+        </ol>
+    </div>
+    <div class="row park-wrapper marTop">
+        <div class="contain">
+            <div class="select-wrapper form-inline" id="fond">
+                <form  role="form" class="form-center">
+                    <div class="input-group"  id="batch"> <input type="hidden" id="id" >
+                        <input type="text" name="batchnumber" id="batch_number" class="form-control" placeholder="请输入批次号">
+                       <span class="input-group-addon" onclick="addAuth()"><i class="fa fa-search"></i>查询</span>
+                    </div>
+                    <form role="form" class="form-center">
+                  
+                    <input type="text" name="startTime" class="form-control" placeholder="开始时间" id="start_time">
+                    <div class="input-group">
+                        <input type="te
+                        xt" name="startTime" class="form-control" placeholder="结束时间" id="end_time">
+                        <span class="input-group-addon"  onclick="featAuth()"><i class="fa fa-search"></i>按时间</span>
+                    </div>
+                 
+                    <a class="btn btn-border" href="{:url('createProject')}"><img src="__img__/icon/add.png">创建新计划</a>
+               <!--  </form> -->
+            </div>
+            <div>
+                <div id="table-wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                    <div class="production-wrapper">
+                        <table id="production-info" class="table">
+                            <tbody id="befer">
+                            {foreach name="production_list" item="vo"}
+
+                                <tr >
+                                    <td><img src="__img__/icon/pici.png">批次号</td>
+                                    <td>{$vo.batch}</td>
+                                    <td><img src="__img__/icon/time.png">开始时间</td>
+                                    <td>{$vo.start_time}</td>
+                                    <td><img src="__img__/icon/time.png">终止时间</td>
+                                    <td>{$vo.end_time}</td>
+                                    <td><img src="__img__/icon/zuowu.png">作物名称</td>
+                                    <td>{$vo.name}</td>
+                                    <td class="operation">
+                                        <a onclick="javascript:detail('{$vo.id}')"><img src="__img__/icon/detail.png">详情</a>
+                                    </td>
+                                    <td class="operation">
+                                        <a onclick="javascript:edit('{$vo.id}')"><img src="__img__/icon/edit.png">修改</a>
+                                    </td>
+                                    <td class="operation">
+                                        <a onclick="delect('{$vo.id}')"><img src="__img__/icon/delect.png">删除</a>
+                                    </td>
+                                </tr>
+                               
+                            {/foreach}
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <table id="altogether" class="table">
+                        <tbody>
+                            <tr>
+                                <td><img src="__img__/icon/shuifei.png">水肥投入</td>
+                                <td>￥{$devot_list.0.money}元</td>
+                                <td><img src="__img__/icon/people.png">人工投入</td>
+                                <td>￥{$devot_list.1.money}元</td>
+                                <td><img src="__img__/icon/nongyao.png">农药投入</td>
+                                <td>￥{$devot_list.2.money}元</td>
+                                <td><img src="__img__/icon/other.png">其他</td>
+                                <td>￥{$devot_list.3.money}元</td>
+                                <td><img src="__img__/icon/total.png">合计</td>
+                                <td>￥{$devot}元</td>
+                                <td><img src="__img__/icon/piechart.png"><a  onclick="showData()">饼状图生成</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框（Modal） 数据图表展示-->
+    <div class="modal fade" id="showData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 900px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <input type="hidden" id="money">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">投资视图</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div id="main" style="width: 900px;height:460px;"></div>
+
+                </div>
+                <div class="modal-footer">
+                    <button  type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div><!-- #page-wrapper -->
+<!-- #page-wrapper -->
+
+
+<!-- 模态框（Modal） 详情-->
+<div class="modal fade" id="addM" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">详情</h4>
+            </div>
+
+            <div class="modal-body">
+                <form id="tform" class="form-horizontal form" role="form" name="form">
+
+                    <div class="form-group">
+                      <input type="hidden" id="id"/>
+                      
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">批次号</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  required name="title" disabled="disabled" id="_number" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">作物名称</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  required name="title" id="crop_variety" disabled="disabled" type="text" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">开始时间</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"   required  name="name"  disabled="disabled" id="start_" type="text">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">结束时间</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" required name="sort" disabled="disabled" type="text" id="end_">
+                         
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button  type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+               <!--  <button type="button" class="submit btn btn-primary" onclick="addMenu('a')">确认添加</button> -->
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+
+<!-- 模态框（Modal）更新 -->
+<div class="modal fade" id="updateM" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">修改生产监测</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform_" class="form-horizontal" role="form" name="form">
+
+                    <input type="hidden" id="id" name="id" value="">
+                     <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">批次号</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="batch_" required minlength="2" disabled="disabled" maxlength="20"  name="title" type="text" >
+                        </div>
+                    </div>
+                    <div class="form-group" id="uplevel">
+                        <label class="col-sm-2 control-label">作物类型</label>
+                        <div class="col-sm-10">
+                            <select id="crop_variety_id" name="pid" class="menu form-control" onclick="onclick">
+                              <option value="0" >--请选择作物--</option>
+                              {foreach name="auth" item="v"}
+                                <option onclick="onclick" value="{$v.id}">{$v.name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">开始时间</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="start" required minlength="9" maxlength="30"  name="name" type="text" >
+                        </div>
+                    </div>
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">结束时间</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="end" name="sort"  type="text"   value="">
+                           
+                        </div>
+                    </div>
+            </div>
+                    <div class="modal-footer">
+                        <input name="res" type="reset" style="display:none;" />
+                        <button type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button"  class="btn btn-primary" onclick="updateM()">确认修改</button>
+                    </div>
+                </form>
+
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 删除 -->
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">删除确认？</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform_" class="form-horizontal" role="form" name="form">
+
+                    <input type="hidden" id="id" name="id" value="">
+                     <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">输入密码</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" placeholder="请输入当前用户密码" id="password" required  minlength="2" maxlength="20"  name="title" type="password" >
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <input name="res" type="reset" style="display:none;" />
+                        <button type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button"  class="btn btn-primary" onclick="updateD()" >确认删除</button>
+                    </div>
+                </form>
+
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+{/block} {block name="js"}
+<!-- <script type="text/javascript" src="__js__/jQuery-1.8.2.min.js"></script>
+ -->
+<script src="__js__/echarts.js"></script>
+ 
+<script src="__js__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="__js__/plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+{/block} {block name="script"}
+<script type="text/javascript">
+/*详情展示*/
+function detail(id){
+    //console.log(id);
+     $('#id').val(id);
+     $.ajax({
+            url: "{:url('admin/ProductionControl/getUserInfo')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id: id},
+            //console.log(id);
+            success:function(data){
+                //console.log(data);
+                $('#_number').val(data.batch);
+                $('#crop_variety').val(data.name);
+                $('#start_').val(data.start_time);
+                $('#end_').val(data.end_time);
+            }
+        });
+      $("#addM").modal('show');
+}
+/*修改展示*/
+
+function edit(id){
+     $('#id').val(id);
+     //取出需要更新的菜单的原数据
+        $.ajax({
+            url: "{:url('admin/ProductionControl/edit')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id: id},
+            success:function(data){
+               $('#batch_').val(data.batch);
+                $('#_variety').val(data.name);
+                $('#start').val(data.start_time);
+                $('#end').val(data.end_time);
+            }
+        });
+
+        $('#updateM').modal('show');
+}
+/*修改内容*/
+  function updateM(){
+        var id = $('#id').val();
+        var batch=$('#batch_').val();
+        var crop_id=$('#crop_variety_id').val();
+         var start_time=$('#start').val();
+         var end_time=$('#end').val();
+        $.ajax({
+            url: "{:url('admin/ProductionControl/update')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id: id,batch:batch,crop_id: crop_id,start_time:start_time,end_time:end_time},
+            success:function(data){
+                //console.log(data);
+                if(data.code==0){
+                    layer.msg(data.msg, {
+                        icon: 2,
+                        time: 2000
+                    })
+                }else{
+                    $('#updateM').modal('hide');
+                    layer.msg(data.msg, {
+                        icon: 1,
+                        time: 1000
+                    },function(){
+                        location.reload();
+                    })
+                }
+            }
+        });
+    }
+/*删除*/
+function delect(id){
+    $('#id').val(id);
+  $.ajax({
+            url: "{:url('admin/ProductionControl/delect')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id:id},
+            //console.log(password);
+            success:function(data){
+                $('#id').val(data.id);
+            }
+        });
+   $('#delete').modal('show');
+ ///console.log(id);
+}
+ function updateD(){
+     var id = $('#id').val();
+     var password = $('#password').val();
+      $.ajax({
+            url: "{:url('admin/ProductionControl/deletel')}",
+            type: 'post',
+            dataType: 'json',
+            data: {password:password,id:id},
+            //console.log(password);
+            success:function(data){
+                if(data.code==0){
+                       layer.msg('删除失败，请输入正确密码',{
+                         icon:2,
+                         // offset: '100px',
+                         anim: 6,
+                         time:2000
+                       },function(index){
+					     layer.closeAll();
+						 $("#password").val('');
+                });
+                }else{
+                    layer.confirm('确认要删除吗？',function(index){
+						layer.closeAll();
+						　setTimeout(function(){
+						$('#delete').modal('hide');
+                        location.reload();
+						},800);
+						
+                    
+               });
+               
+                }
+}
+});
+       
+    }
+</script>
+<script type="text/javascript">
+$('#start_time').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true
+});
+$('#end_time').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true
+});
+$('#start_time').datetimepicker().on('changeDate', function(ev) {
+    $('#end_time').datetimepicker('setStartDate', $('#start_time').val());
+})
+/*修改的时间插件*/
+$('#start').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true
+});
+$('#end').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true
+});
+$('#start').datetimepicker().on('changeDate', function(ev) {
+    $('#end').datetimepicker('setStartDate', $('#start').val());
+})
+</script>
+<script type="text/javascript">
+/*批次号查询*/
+    function addAuth(){
+       var id = $('#id').val();
+        var batch = $('#batch_number').val();
+        $.ajax({
+            url: "{:url('admin/ProductionControl/feath')}",
+            type: 'post',
+            dataType: 'json',
+            data: {batch:batch},
+          success:function(data){
+            if(data.code==0){
+                    layer.msg(data.msg, {
+                        icon: 2,
+                        time: 2000
+                    })
+                }else{
+                
+                console.log(data);
+                if(data){
+                   // $('#batch_number').val(data.batch);
+                  /*把需要用的东西放到字符串拼接，然后替换掉之前的*/
+                     var html = '<tr style="display:none">';
+                     $(data).each(function(k,v){
+                          html += '<tr><td><img src="__img__/icon/pici.png">批次号</td><td>'+v.batch+'</td><td><img src="__img__/icon/time.png">开始时间</td><td>'+v.start_time+'</td><td><img src="__img__/icon/time.png">终止时间</td><td>'+v.end_time+'</td><td><img src="__img__/icon/zuowu.png">作物名称</td> <td>'+v.name+'</td><td class="operation"><a onclick="javascript:detail('+v.id+')"><img src="__img__/icon/detail.png">详情</a></td><td class="operation"><a onclick="javascript:edit('+v.id+')"><img src="__img__/icon/edit.png">修改</a> </td><td class="operation"><a onclick="delect('+v.id+')"><img src="__img__/icon/delect.png">删除</a></td></tr>'
+                     });
+					 html += "</tr>";
+                      html = $(html);
+                       //把数据放到页面上
+           $("#befer").html(html);
+           // 效果显示出来评论的内容
+           html.fadeIn();
+                    
+                }else{
+                     layer.msg('暂无你需要的数据',{icon: 2,time: 2000,});
+            
+                }
+               }
+        },
+        });
+    }
+/*时间查询*/
+function featAuth(){
+        var start_time = $('#start_time').val();
+        var end_time = $('#end_time').val();
+$.ajax({
+            url: "{:url('admin/ProductionControl/feath1')}",
+            type: 'post',
+            dataType: 'json',
+            data: {start_time:start_time,end_time:end_time},
+            success:function(data){
+                //$('#batch_number').val($data.batch_number);
+              //console.log(data);
+              
+
+                     if(data){
+                    $('#start_number').val(data.start_number);
+                    $('#end_number').val(data.end_number);
+                  /*把需要用的东西放到字符串拼接，然后替换掉之前的*/
+                    var html = '<tr style="display:none">';
+                     $(data).each(function(k,v){
+                          html += '<tr><td><img src="__img__/icon/pici.png">批次号</td><td>'+v.batch+'</td><td><img src="__img__/icon/time.png">开始时间</td><td>'+v.start_time+'</td><td><img src="__img__/icon/time.png">终止时间</td><td>'+v.end_time+'</td><td><img src="__img__/icon/zuowu.png">作物名称</td> <td>'+v.name+'</td><td class="operation"><a onclick="javascript:detail('+v.id+')"><img src="__img__/icon/detail.png">详情</a></td><td class="operation"><a onclick="javascript:edit('+v.id+')"><img src="__img__/icon/edit.png">修改</a> </td><td class="operation"><a onclick="delect('+v.id+')"><img src="__img__/icon/delect.png">删除</a></td></tr>'
+                     });
+					 html += "</tr>";
+                      html = $(html);
+                       //把数据放到页面上
+           $("#befer").html(html);
+           // 效果显示出来评论的内容
+           html.fadeIn();
+                    
+                }else{
+                     layer.msg('暂无你需要的数据',{icon: 2,time: 2000,});
+             /*        
+              html = '<tbody><tr><td style="color:red;">暂无你需要的数据</td></tr></tbody>';
+               $("#befer").html(html);*/
+                }
+               
+            }
+        });
+
+
+}
+</script>
+<script type="text/javascript">
+/*饼状图*/
+var myChart = echarts.init(document.getElementById('main'));
+
+option = {
+    title : {
+        text: '每个模块的消费金额',
+       
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+      data: ['水肥投入','人工投入','农药投入','其他投入']
+    },
+    series : [
+        {
+            name: '成本投入',
+            type: 'pie',
+            radius : '65%',
+            center: ['50%', '55%'],
+            data:[
+                {value:420, name:'水肥投入'},
+                {value:310, name:'人工投入'},
+                {value:234, name:'农药投入'},
+                {value:135, name:'其他投入'},
+               
+            ],
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX:0,
+                    shadowColor: 'rgba(0, 0.5, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
+//if (option && typeof option === "object") {
+   // myChart.setOption(option, true);
+//}
+
+
+function showData(){
+     $('#money').val(money);
+      
+        $.ajax({
+            url: "{:url('admin/ProductionControl/showData')}",
+            type: 'post',
+            dataType: 'json',
+            success:function(data){
+              var arr = [];
+               var arr1 = [];
+                $.each(data,function(k,v){
+                    arr.push(v.project);
+                     arr1.push({value:v.money, name:v.project});
+                });
+                // for(p in arr1){
+                //     console.log(typeof(arr1[p]) =='string');
+                //     JSON.parse(arr1[p]);
+                // }
+               console.log(arr1);
+               // console.log(arr);
+                 myChart.setOption({
+                     series:[{data:arr1}],
+                     legend: {data:arr},
+                 });
+                $("#showData").modal('show');
+            }
+            });
+      
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+</script>
+
+
+
+
+{/block}

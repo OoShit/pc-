@@ -1,0 +1,1929 @@
+{extend name='base'} {block name="css"}
+<link rel="stylesheet" type="text/css" href="__css__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css"> {/block} {block name='content'}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="row gray-bg">
+        <ol class="breadcrumb">
+            <li><a href="#" class="active"><i class="fa fa-home"></i>生产管理</a></li>
+        </ol>
+    </div>
+    <div class="row park-wrapper ">
+        <div class="actionlist-contain">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#a1" data-toggle="tab">操作记录</a></li>
+                <li><a href="#a2" data-toggle="tab">生长记录</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="a1">
+                    <div class="select-wrapper" id="fond">
+                       <form role="form" class="clearfix action-select">
+                            <div class="row">
+                                <div class="col-lg-3 rWidth3">
+                                    <h4 class="title">作物种类</h4>
+                                    <div class="item selectUI resetUI unfold">
+                                        <div class="selectUI-text text">
+                                            <span>请选择作物种类</span>
+                                            <i class="Carrow-down"></i>
+                                        </div>
+                                        <ul class="" id="strtype">
+                                        {volist name='croptype' id='vo'}
+                                            <li id="{$vo.id}" class="" onclick="getCroptype(this)">{$vo.name}</li>
+                                        {/volist}
+
+<!--                                             <li>二氧化碳浓度</li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 rWidth3">
+                                    <h4 class="title">作物名称</h4>
+                                    <div class="item selectUI resetUI">
+                                        <div class="selectUI-text text">
+                                            <span>请选择作物名称</span>
+                                            <i class="Carrow-down"></i>
+                                        </div>
+                                        <ul class="" id="strlist">
+                                            <!-- <li >土壤温度</li>
+                                            <li>二氧化碳浓度</li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 rWidth3">
+                                    <h4 class="title">批次</h4>
+                                    <div class="item selectUI resetUI">
+                                        <div class="selectUI-text text">
+                                            <span>请选择批次</span>
+                                            <i class="Carrow-down"></i>
+                                        </div>
+                                        <ul class="" id="strbatch">
+
+                                            <!-- <li>土壤温度</li>
+                                            <li>二氧化碳浓度</li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 rWidth2">
+                                    <button class="btn btn-primary Research" type="submit"><i class="fa fa-search"></i>搜 索</button>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="perid" id="flowimg">
+
+                               </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="table-box">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h4 class="title-show"><img src="__img__/cycle/borTitle.png">田间操作</h4>
+                                <button class="add-action" data-toggle="modal" data-target="#addF"><img src="__img__/cycle/icon_add.png"></button>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="setHeight">
+                                    <table class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>生长阶段</th>
+                                                <th>操作类型</th>
+                                                <th>操作内容</th>
+                                                <th>操作面积</th>
+                                                <th>操作原因</th>
+                                                <th>操作时间</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {foreach name='farms' item='vo'}
+
+                                            <tr>
+                                                <td>{$vo.name}</td>
+                                                <td>{$vo.description}</td>
+                                                <td>{$vo.project}</td>
+                                                <td>{$vo.area}M2</td>
+                                                <td>{$vo.reason}</td>
+                                                <td>{$vo.addtime}</td>
+                                                <td class="operation">
+                                                    <a onclick="javascript:edit('{$vo.id}')"><img src="__img__/cycle/icon_pen.png">修改</a>
+                                                    <a onclick="delect('{:url(\'admin/Action/del\',[\'id\' => $vo[\'id\']])}','{$vo.name}')"><img src="__img__/cycle/icon_delete.png">删除</a>
+                                                </td>
+                                            </tr>
+                                            {/foreach}
+                                          
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="table-box">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h4 class="title-show"><img src="__img__/cycle/borTitle.png">施肥操作</h4>
+                                        <button class="add-action"  data-toggle="modal" data-target="#addS"><img src="__img__/cycle/icon_add.png"></button>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="setHeight">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>生长阶段</th>
+                                                        <th>配方号</th>
+                                                        <th>施肥面积</th>
+                                                        <th>用量</th>
+                                                        <th>品牌</th>
+                                                        <th>供应商</th>
+                                                        <th>种类</th>
+                                                        <th>施肥时间</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                 
+                                                {foreach name="fertilization" item="v"}
+                                                    <tr>
+                                                        <td>{$v.name}</td>
+                                                        <td>{$v.formula}</td>
+                                                        <td>{$v.area}M2</td>
+                                                        <td>{$v.dosage}KG</td>
+                                                        <td>{$v.brand}</td>
+                                                        <td>{$v.supplier}</td>
+                                                        <td>{$v.kind}</td>
+                                                        <td>{$v.addtime}</td>
+                                                        <td class="operation">
+                                                            <a onclick="javascript:edits('{$v.id}')"><img src="__img__/cycle/icon_pen.png"></a>
+                                                            <a onclick="delects('{:url(\'admin/Action/dels\',[\'id\' => $v[\'id\']])}','{$v.name}')"><img src="__img__/cycle/icon_delete.png"></a>
+                                                        </td>
+                                                    </tr>
+                                                    {/foreach}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="table-box">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h4 class="title-show"><img src="__img__/cycle/borTitle.png">施药操作</h4>
+                                        <button class="add-action" data-toggle="modal" data-target="#addD"><img src="__img__/cycle/icon_add.png"></button>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="setHeight">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                <tr>
+                                                        <th>生长阶段</th>
+                                                        <th>患害名称</th>
+                                                        <th>施药面积</th>
+                                                        <th>药剂用量</th>
+                                                        <th>药水比</th>
+                                                        <th>品牌</th>
+                                                        <th>施药时间</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                 </thead>
+                                                <tbody>
+                                                 {foreach name="delivery" item="v"}
+                                                     <tr>
+                                                        <td>{$v.name}</td>
+                                                        <td>{$v.harm}</td>
+                                                        <td>{$v.area}M2</td>
+                                                        <td>{$v.agentia}KG</td>
+                                                        <td>{$v.potions}</td>
+                                                        <td>{$v.brand}</td>
+                                                        <td>{$v.addtime}</td>
+                                                        <td class="operation">
+                                                            <a onclick="javascript:editd('{$v.id}')"><img src="__img__/cycle/icon_pen.png"></a>
+                                                            <a onclick="delectd('{:url(\'admin/Action/deld\',[\'id\' => $v[\'id\']])}','{$v.name}')"><img src="__img__/cycle/icon_delete.png"></a>
+                                                        </td>
+                                                    </tr>
+                                                     {/foreach}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="table-box">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h4 class="title-show"><img src="__img__/cycle/borTitle.png">灌溉操作</h4>
+                                        <button class="add-action" data-toggle="modal" data-target="#addI"><img src="__img__/cycle/icon_add.png"></button>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="setHeight">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>生长阶段</th>
+                                                        <th>灌溉方式</th>
+                                                        <th>灌溉面积</th>
+                                                        <th>灌溉量</th>
+                                                        <th>灌溉时间</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {foreach name='irrgation_operation' item='v'}
+                                                    <tr>
+                                                        <td>{$v.name}</td>
+                                                        <td>{$v.regime}</td>
+                                                        <td>{$v.area}M2</td>
+                                                        <td>{$v.volume}M3</td>
+                                                        <td>{$v.addtime}</td>
+                                                        <td class="operation">
+                                                            <a onclick="javascript:editi('{$v.id}')"><img src="__img__/cycle/icon_pen.png"></a>
+                                                            <a onclick="delecti('{:url(\'admin/Action/deli\',[\'id\' => $v[\'id\']])}','{$v.name}')"><img src="__img__/cycle/icon_delete.png"></a>
+                                                        </td>
+                                                    </tr>
+                                                    {/foreach}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="table-box">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h4 class="title-show"><img src="__img__/cycle/borTitle.png">施药配方</h4>
+                                        <button class="add-action" data-toggle="modal" data-target="#addP"><img src="__img__/cycle/icon_add.png"></button>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="setHeight">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>配方号</th>
+                                                        <th>元素名称</th>
+                                                        <th>所占比例</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {foreach name='pesticide' item='v'}
+                                                    <tr>
+                                                        <td>{$v.formual}</td>
+                                                        <td>{$v.element}</td>
+                                                        <td>{$v.proportion}%</td>
+                                                        <td class="operation">
+                                                            <a onclick="javascript:editp('{$v.id}')"><img src="__img__/cycle/icon_pen.png"></a>
+                                                            <a onclick="delcfm('{:url(\'admin/Action/delp\',[\'id\' => $v[\'id\']])}','{$v.formual}')"><img src="__img__/cycle/icon_delete.png"/></a>
+                                                        </td>
+                                                    </tr>
+                                                    {/foreach}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="a2">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="border">
+                                <div class="select-wrapper" id="">
+                                    <form role="form" class="clearfix action-select">
+                                       <div class="row">
+                                            <div class="col-lg-3 rWidth3">
+                                                <h4 class="title">品种</h4>
+                                                <div class="item selectUI resetUI">
+                                                    <div class="selectUI-text text">
+                                                        <span>请选择品种</span>
+                                                        <i class="Carrow-down"></i>
+                                                    </div>
+                                                    <ul class="">
+                                                        <li>土壤温度</li>
+                                                        <li>二氧化碳浓度</li>
+                                                    </ul>
+                                                </div>
+                                          </div>
+                                            <div class="col-lg-3 rWidth3">
+                                                <h4 class="title">作物</h4>
+                                                <div class="item selectUI resetUI">
+                                                    <div class="selectUI-text text">
+                                                        <span>请选择作物名称</span>
+                                                        <i class="Carrow-down"></i>
+                                                    </div>
+                                                    <ul class="">
+                                                        <li>土壤温度</li>
+                                                        <li>二氧化碳浓度</li>
+                                                    </ul>
+                                                </div>
+                                          </div>
+                                            <div class="col-lg-3 rWidth3">
+                                                <h4 class="title">批次号</h4>
+                                                <div class="item selectUI resetUI">
+                                                    <div class="selectUI-text text">
+                                                        <span>请选择批次</span>
+                                                        <i class="Carrow-down"></i>
+                                                    </div>
+                                                    <ul class="">
+                                                        <li>土壤温度</li>
+                                                        <li>二氧化碳浓度</li>
+                                                    </ul>
+                                                </div>
+                                          </div>
+                                            <div class="col-lg-3 rWidth2">
+                                                <button class="btn btn-primary Research" type="submit"><i class="fa fa-search"></i>搜 索</button>
+                                            </div>
+                                        </div> 
+                                    </form>
+                                </div>
+                                <div class="table-box">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <h4 class="title-show"><img src="__img__/cycle/borTitle.png">生长状况</h4>
+                                            <button class="add-action"><img src="__img__/cycle/icon_add.png"></button>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="setHeight">
+                                                <table class="table table-striped table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>生长阶段</th>
+                                                            <th>生长时长</th>
+                                                            <th>项目类型</th>
+                                                            <th>项目内容</th>
+                                                            <th>记录时间</th>
+                                                            <th>操作</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>播种期</td>
+                                                            <td>灌溉</td>
+                                                            <td>无</td>
+                                                            <td>200M2</td>
+                                                            <td>5天/次</td>
+                                                            <td class="operation">
+                                                                <a href=""><img src="__img__/cycle/icon_pen.png"></a>
+                                                                <a href=""><img src="__img__/cycle/icon_delete.png"></a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>播种期</td>
+                                                            <td>灌溉</td>
+                                                            <td>无</td>
+                                                            <td>200M2</td>
+                                                            <td>5天/次</td>
+                                                            <td class="operation">
+                                                                <a href=""><img src="__img__/cycle/icon_pen.png"></a>
+                                                                <a href=""><img src="__img__/cycle/icon_delete.png"></a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>播种期</td>
+                                                            <td>灌溉</td>
+                                                            <td>无</td>
+                                                            <td>200M2</td>
+                                                            <td>5天/次</td>
+                                                            <td class="operation">
+                                                                <a href=""><img src="__img__/cycle/icon_pen.png"></a>
+                                                                <a href=""><img src="__img__/cycle/icon_delete.png"></a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>播种期</td>
+                                                            <td>灌溉</td>
+                                                            <td>无</td>
+                                                            <td>200M2</td>
+                                                            <td>5天/次</td>
+                                                            <td class="operation">
+                                                                <a href=""><img src="__img__/cycle/icon_pen.png"></a>
+                                                                <a href=""><img src="__img__/cycle/icon_delete.png"></a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>播种期</td>
+                                                            <td>灌溉</td>
+                                                            <td>无</td>
+                                                            <td>200M2</td>
+                                                            <td>5天/次</td>
+                                                            <td class="operation">
+                                                                <a href=""><img src="__img__/cycle/icon_pen.png"></a>
+                                                                <a href=""><img src="__img__/cycle/icon_delete.png"></a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>播种期</td>
+                                                            <td>灌溉</td>
+                                                            <td>无</td>
+                                                            <td>200M2</td>
+                                                            <td>5天/次</td>
+                                                            <td class="operation">
+                                                                <a href=""><img src="__img__/cycle/icon_pen.png"></a>
+                                                                <a href=""><img src="__img__/cycle/icon_delete.png"></a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>播种期</td>
+                                                            <td>灌溉</td>
+                                                            <td>无</td>
+                                                            <td>200M2</td>
+                                                            <td>5天/次</td>
+                                                            <td class="operation">
+                                                                <a href=""><img src="__img__/cycle/icon_pen.png"></a>
+                                                                <a href=""><img src="__img__/cycle/icon_delete.png"></a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="table-box">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h4 class="title-show"><img src="__img__/cycle/borTitle.png">生长期图片</h4>
+                                                    <button class="add-action"><img src="__img__/cycle/icon_add.png"></button>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="setHeight">
+                                                        <table class="table table-striped table-bordered table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>图片阶段</th>
+                                                                    <th>图片备注</th>
+                                                                    <th>上传图片</th>
+                                                                    <th>操作</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>播种期</td>
+                                                                    <td>1</td>
+                                                                    <td><img src="__img__/cycle/icon_picup.png" class="img_Up"></td>
+                                                                    <td class="operation">
+                                                                        <a href=""><img src="__img__/cycle/icon_pen.png"></a>
+                                                                        <a href=""><img src="__img__/cycle/icon_delete.png"></a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="table-box">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h4 class="title-show"><img src="__img__/cycle/borTitle.png">指标参数</h4>
+                                                    <button class="add-action"><img src="__img__/cycle/icon_add.png"></button>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="setHeight">
+                                                        <table class="table table-striped table-bordered table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>指标名称</th>
+                                                                    <th>指标描述</th>
+                                                                    <th>指标等级</th>
+                                                                    <th>操作</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>糖分</td>
+                                                                    <td>1</td>
+                                                                    <td>16%</td>
+                                                                    <td class="operation">
+                                                                        <a href=""><img src="__img__/cycle/icon_pen.png"></a>
+                                                                        <a href=""><img src="__img__/cycle/icon_delete.png"></a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="table-box">
+                                <div class="row">
+                                    <div class="col-lg-12 relative">
+                                        <h4 class="title-show"><img src="__img__/cycle/borTitle.png">生长状况详细信息</h4>
+                                        <p class="info-show">葡萄<span>|</span>玫瑰香</p>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="dilatation setHeight">
+                                            <table class="table table-striped  table-hover">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>2017-04-06</td>
+                                                        <td>出芽期</td>
+                                                        <td>15d</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2017-04-06</td>
+                                                        <td>出芽期</td>
+                                                        <td>15d</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2017-04-06</td>
+                                                        <td>出芽期</td>
+                                                        <td>15d</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2017-04-06</td>
+                                                        <td>出芽期</td>
+                                                        <td>15d</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <ul class="pagination pull-right">
+                                            <li><a href="">上一页</a></li>
+                                            <li class="active"><a href="">1</a></li>
+                                            <li><a href="">2</a></li>
+                                            <li><a href="">3</a></li>
+                                            <li><a href="">4</a></li>
+                                            <li><a href="">5</a></li>
+                                            <li><a href="">下一页</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-box">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h4 class="title-show"><img src="__img__/cycle/borTitle.png">挂果期</h4>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="setHeight">
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <p class="title">叶面积指数：</p>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <p class="">XXXXX</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <p class="title">叶片颜色：</p>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <p class="">XXXXX</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <p class="title">结果数量：</p>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <p class="">5D--1960</p>
+                                                    <p class="">10D--3560</p>
+                                                    <p class="">15D--4560</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <p class="title">结果质量：</p>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <p class="">XXXXX</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 模态框（Modal） 添加田间操作-->
+<div class="modal fade" id="addF" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">添加田间操作</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform" class="form-horizontal form" role="form">
+
+                       
+                    <div class="form-group" id="authG">
+                        <label class="col-sm-2 control-label">生长阶段</label>
+                        <div class="col-sm-10">
+                           <select class="form-control" name="auth" id="cropflow_id"  onchange="flowDiv()" >
+                                <option value="">请选择生长阶段</option>
+                                 {volist name='$cropflow' id='vo'}
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                    {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">操作类型</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="description" type="text" placeholder="请输入操作类型" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">操作内容</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="project" type="text" placeholder="请输入操作内容" >
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">操作面积</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="area" placeholder="请输入操作面积">
+                            <!--<p class="help-block">排序数值越大排列越靠前</p>-->
+                        </div>
+                    </div>
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">操作原因</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="reason" placeholder="请输入操作原因">
+                        </div>
+                    </div>
+
+                     <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">操作时间</label>
+    
+                        <div class="col-sm-10">
+                            <input class="form-control addtime"   required  name="name" id="addtime" type="text" placeholder="请选择施肥时间" >
+                        </div>
+                    </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button  type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="submit btn btn-primary" onclick="addFarm()">确认添加</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+               
+
+    </div><!-- /.modal -->
+</div>
+
+
+
+
+
+<!-- 模态框（Modal） 修改田间操作-->
+<div class="modal fade" id="updateL" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">修改田间操作</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform" class="form-horizontal form" role="form">
+
+     
+
+                    <div class="form-group" id="authG">
+                        <label class="col-sm-2 control-label">生长阶段</label>
+                        <div class="col-sm-10">
+                           <select class="form-control" name="auth" disabled="disabled" id="cropflow_id_" >
+                                <option value="">请选择生长阶段</option>
+                                 {volist name='$cropflow' id='vo'}
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                    {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" id="id"/>
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">操作类型</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="description_" type="text" placeholder="请输入操作类型" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">操作内容</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="project_" type="text" placeholder="请输入操作内容" >
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">操作面积</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="area_" placeholder="请输入操作面积">
+                            <!--<p class="help-block">排序数值越大排列越靠前</p>-->
+                        </div>
+                    </div>
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">操作原因</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="reason_" placeholder="请输入操作原因">
+                        </div>
+                    </div>
+
+                     <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">操作时间</label>
+    
+                        <div class="col-sm-10">
+                            <input class="form-control addtime"   required  name="name" id="addtime_" type="text">
+                        </div>
+                    </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button  type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="submit btn btn-primary" onclick="update()">确认修改</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+               
+
+    </div><!-- /.modal -->
+</div>
+
+<!-- 信息删除确认 -->
+<div class="modal fade" id="delcfmModel">
+    <div class="modal-dialog">
+        <div class="modal-content message_align">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">提示信息</h4>
+            </div>
+            <div class="modal-body">
+                <p id="tishi" style="align-content: center; font-size: 20px">您确认要删除吗？</p>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="url"/>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <a  onclick="urlSubmit()" class="btn btn-success" data-dismiss="modal">确定</a>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+<!-- 添加施肥操作 -->
+<div class="modal fade" id="addS" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">添加施肥操作</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform" class="form-horizontal form" role="form">
+
+    
+                    <div class="form-group" id="authG">
+                        <label class="col-sm-2 control-label">生长阶段</label>
+                        <div class="col-sm-10">
+                           <select class="form-control" name="auth" id="_cropflow_id" >
+                                <option value="">请选择生长阶段</option>
+                                 {volist name='$cropflow' id='vo'}
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                    {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">配方号</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="formula" type="text" placeholder="请输入配方号" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">施肥面积</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="_area" type="text" placeholder="请输入施肥面积" >
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">施肥用量</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="dosage" placeholder="请输入施肥用量">
+                            <!--<p class="help-block">排序数值越大排列越靠前</p>-->
+                        </div>
+                    </div>
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">施肥品牌</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="brand" placeholder="请输入施肥品牌">
+                        </div>
+                    </div>
+                <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">供应商</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="supplier" type="text" id="supplier" placeholder="请输入供应商">
+                        </div>
+                    </div><div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">施肥种类</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="kind" placeholder="请输入施肥种类">
+                        </div>
+                    </div>
+                     <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">施肥时间</label>
+                        <div class="col-sm-10">
+                            <input class="form-control addtime" name="name" id="_addtime" type="text" placeholder="请选择施肥时间">
+                        </div>
+                    </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button  type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="submit btn btn-primary" onclick="addfer()">确认添加</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+               
+
+    </div><!-- /.modal -->
+</div>
+
+
+
+<!-- 修改施肥操作 -->
+<div class="modal fade" id="updateS" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">修改施肥操作</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform" class="form-horizontal form" role="form">
+
+    
+                    <div class="form-group" id="authG">
+                        <label class="col-sm-2 control-label">生长阶段</label>
+                        <div class="col-sm-10">
+                           <select class="form-control" name="auth" id="cropflow"  disabled="disabled">
+                                <option value="">请选择生长阶段</option>
+                                 {volist name='$cropflow' id='vo'}
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                    {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" id="id">
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">配方号</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="formula_" type="text" placeholder="请输入配方号" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">施肥面积</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="_area_" type="text" placeholder="请输入施肥面积" >
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">施肥用量</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="dosage_" placeholder="请输入施肥用量">
+                            <!--<p class="help-block">排序数值越大排列越靠前</p>-->
+                        </div>
+                    </div>
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">施肥品牌</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="brand_" placeholder="请输入施肥品牌">
+                        </div>
+                    </div>
+                <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">供应商</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="supplier" type="text" id="supplier_" placeholder="请输入供应商">
+                        </div>
+                    </div><div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">施肥种类</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="kind_" placeholder="请输入施肥种类">
+                        </div>
+                    </div>
+                     <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">施肥时间</label>
+                        <div class="col-sm-10">
+                            <input class="form-control addtime" name="name" id="add_time" type="text">
+                        </div>
+                    </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button  type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="submit btn btn-primary" onclick="updatefer()">确认修改</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+                
+
+    </div><!-- /.modal -->
+</div>
+
+
+<!-- 添加施药操作 -->
+<div class="modal fade" id="addD" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">添加施药操作</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform" class="form-horizontal form" role="form">
+
+    
+                    <div class="form-group" id="authG">
+                        <label class="col-sm-2 control-label">生长阶段</label>
+                        <div class="col-sm-10">
+                           <select class="form-control" name="auth" id="cropflowid" >
+                                <option value="">请选择生长阶段</option>
+                                 {volist name='$cropflow' id='vo'}
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                    {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">患害名称</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="harm" type="text" placeholder="请输入病虫害名称" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">施药面积</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="areaD" type="text" placeholder="请输入施药面积" >
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">药剂用量</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="agentia" placeholder="请输入施药用量">
+                            <!--<p class="help-block">排序数值越大排列越靠前</p>-->
+                        </div>
+                    </div>
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">药水比</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="potions" placeholder="请输入药水的比例">
+                        </div>
+                    </div>
+                <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">品牌</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="supplier" type="text" id="brandD" placeholder="请输入使用的品牌">
+                        </div>
+                </div>
+                       <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">施药时间</label>
+                        <div class="col-sm-10">
+                            <input class="form-control addtime" name="name" id="addtimeD" type="text" placeholder="请选择施药时间">
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button  type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="submit btn btn-primary" onclick="adddelive()">确认添加</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+       </div><!-- /.modal -->
+</div>
+
+<!-- 修改施药操作 -->
+<div class="modal fade" id="updateD" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">修改施药操作</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform" class="form-horizontal form" role="form">
+                <div class="form-group" id="authG">
+                        <label class="col-sm-2 control-label">生长阶段</label>
+                        <div class="col-sm-10">
+                           <select class="form-control" disabled="disabled" name="auth" id="cropflowid_" >
+                                <option value="">请选择生长阶段</option>
+                                 {volist name='$cropflow' id='vo'}
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                    {/volist}
+                            </select>
+                        </div>
+                    </div>
+                     <input type="hidden" id="id">
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">患害名称</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="harm_" type="text" placeholder="请输入病虫害名称" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">施药面积</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="areaD_" type="text" placeholder="请输入施药面积" >
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">药剂用量</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="agentia_" placeholder="请输入施药用量">
+                            <!--<p class="help-block">排序数值越大排列越靠前</p>-->
+                        </div>
+                    </div>
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">药水比</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="potions_" placeholder="请输入药水的比例">
+                        </div>
+                    </div>
+                <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">品牌</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="supplier" type="text" id="brandD_" placeholder="请输入使用的品牌">
+                        </div>
+                </div>
+                       <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">施药时间</label>
+                        <div class="col-sm-10">
+                            <input class="form-control addtime" name="name" id="addtimeD_" type="text" >
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button  type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="submit btn btn-primary" onclick="updatedelive()">确认修改</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+       </div><!-- /.modal -->
+</div>
+
+<!-- 添加灌溉操作 -->
+<div class="modal fade" id="addI" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">添加灌溉操作</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform" class="form-horizontal form" role="form">
+                     <div class="form-group" id="authG">
+                        <label class="col-sm-2 control-label">生长阶段</label>
+                        <div class="col-sm-10">
+                           <select class="form-control" name="auth" id="cropflowidI" >
+                                <option value="">请选择生长阶段</option>
+                                 {volist name='$cropflow' id='vo'}
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                    {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">灌溉方式</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="regime" type="text" placeholder="请输入灌溉方式" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">灌溉面积</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="areaI" type="text" placeholder="请输入灌溉面积" >
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">灌溉量</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="volume" placeholder="请输入灌溉量">
+                            <!--<p class="help-block">排序数值越大排列越靠前</p>-->
+                        </div>
+                    </div>
+                  
+                     <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">灌溉时间</label>
+                        <div class="col-sm-10">
+                            <input class="form-control addtime" name="name" id="addtimeI" type="text" placeholder="请选择灌溉时间">
+                        </div>
+                    </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button  type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="submit btn btn-primary" onclick="addirr()">确认添加</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+               
+
+    </div><!-- /.modal -->
+</div>
+
+
+
+<!-- 修改灌溉操作 -->
+<div class="modal fade" id="updateI" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">修改灌溉操作</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform" class="form-horizontal form" role="form">
+                     <div class="form-group" id="authG">
+                        <label class="col-sm-2 control-label">生长阶段</label>
+                        <div class="col-sm-10">
+                           <select class="form-control" name="auth" id="cropflowidI_" disabled="disabled" >
+                                <option value="">请选择生长阶段</option>
+                                 {volist name='$cropflow' id='vo'}
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                    {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" id="id">
+                     <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">灌溉方式</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="regime_" type="text" placeholder="请输入灌溉方式" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">灌溉面积</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="areaI_" type="text" placeholder="请输入灌溉面积" >
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">灌溉量</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="volume_" placeholder="请输入灌溉量">
+                            <!--<p class="help-block">排序数值越大排列越靠前</p>-->
+                        </div>
+                    </div>
+                  
+                     <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">灌溉时间</label>
+                        <div class="col-sm-10">
+                            <input class="form-control addtime" name="name" id="addtimeI_" type="text" placeholder="请选择灌溉时间">
+                        </div>
+                    </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button  type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="submit btn btn-primary" onclick="updateirr()">确认修改</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+               
+
+    </div><!-- /.modal -->
+</div>
+
+<!-- 添加施肥配方 -->
+<div class="modal fade" id="addP" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">添加施肥配方</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform" class="form-horizontal form" role="form">
+                     
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">配方号</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="formualP" type="text" placeholder="请输入配方号" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">元素名称</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="element" type="text" placeholder="请输入元素名称" >
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">所占比例</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="proportion" placeholder="请输入灌溉量">
+                            <!--<p class="help-block">排序数值越大排列越靠前</p>-->
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button  type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="submit btn btn-primary" onclick="addpest()">确认添加</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+       </div><!-- /.modal -->
+</div>
+
+
+
+<!-- 修改施药配方 -->
+<div class="modal fade" id="updateP" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">修改施药配方</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform" class="form-horizontal form" role="form">
+              
+                     <input type="hidden" id="id">
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">配方号</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="formualP_" type="text" placeholder="请输入配方号" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">元素名称</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" minlength="9" name="name" id="element_" type="text" placeholder="请输入元素名称" >
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">所占比例</label>
+                        <div class="col-sm-10">
+                            <input class="form-control"  name="sort" type="text" id="proportion_" placeholder="请输入所占比例">
+                            <!--<p class="help-block">排序数值越大排列越靠前</p>-->
+                        </div>
+                    </div>
+                    
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button  type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="submit btn btn-primary" onclick="updatepest()">确认修改</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+       </div><!-- /.modal -->
+</div>
+
+
+{/block}
+{block name="js"}
+<script src="__js__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="__js__/plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+{/block}
+ {block name='script'}
+<script>
+  //
+  $('.selectUI').on('click', function(event) {
+        event.preventDefault();
+        $(this).toggleClass('unfold').find('ul').toggle();
+    });
+    $('.selectUI ul li').on('click', function(event) {
+        $(this).closest('.selectUI').find('.selectUI-text').children('span').html($(this).html());
+    });
+    </script>
+    <script>
+  //获取作物列表
+    function getCroptype(obj){
+         var type_id = $(obj).attr('id');
+         var li = '';
+         // $.when(
+          //$('#'+str+'_type_name').val($(obj).text());
+            $.ajax({
+                url: "{:url('admin/Action/getCroptype')}",
+                type: 'post',
+                dataType: 'json',
+                data: {type_id: type_id},
+                success:function(data){
+                     if(data != ''){
+                    console.log(data);
+                    $.each(data,function(k,v){
+                        li += '<li style=list-style-type:none id="'+ v.id +'">' + v.name + '</li>';
+                      });
+
+                     $('#strlist').append(li);
+
+                  }else{
+                     
+                $('#strlist').parent().children('.selectUI-text').children('span').text(li);
+                  }
+
+                 }
+       /* $('.selectUI ul li').on('click', function(event) {
+            $(this).closest('.selectUI').find('.selectUI-text').children('span').html($(this).html());
+                     });*/
+            });
+           
+      
+    }
+
+
+
+  //添加田间作物
+    function addFarm(){
+        var description = $('#description').val();
+        var project = $('#project').val();
+        var area = $('#area').val();
+        var reason = $('#reason').val();
+        var addtime = $('#addtime').val();
+        var cropflow_id = $('#cropflow_id').val();
+        $.ajax({
+            url: "{:url('admin/Action/addFarm')}",
+            type: 'post',
+            dataType: 'json',
+            data:{description: description,project: project,area: area,reason: reason,addtime: addtime,cropflow_id: cropflow_id},
+            success:function(data){
+                console.log(data);
+                if(data.code==0){
+                    layer.msg(data.msg, { icon: 2,time: 2000})
+                }else{
+                    $('#addF').modal('hide');
+                    layer.msg(data.msg, {icon: 1,time: 2000},function(){location.reload();})
+                }
+            }
+        });
+    }
+        //表单重置
+    $(function () { $('#addF').on('hidden.bs.modal', function () {
+      //  alert()
+
+        $("input[name='res']").click();
+    })
+    });
+//修改展示
+function edit(id){
+ $('#id').val(id);
+      console.log(id);
+    $.ajax({ url: "{:url('admin/Action/addedit')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id: id},
+            success:function(data){
+             console.log(data);
+            $('#description_').val(data.description);
+            $('#project_').val(data.project);
+            $('#area_').val(data.area);
+            $('#reason_').val(data.reason);
+            $('#addtime_').val(data.addtime);
+            $('#cropflow_id_').val(data.cropflow_id);
+            }
+        });
+        $("#updateL").modal('show');
+}
+ //修改
+ function update(){
+         var id = $('#id').val();
+         var description=$('#description_').val();
+         var project=$('#project_').val();
+         var area=$('#area_').val();
+         var reason=$('#reason_').val();
+         var addtime=$('#addtime_').val();
+         var cropflow_id=$('#cropflow_id_').val();
+     $.ajax({
+            url: "{:url('admin/Action/update')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id: id,description:description,project: project,area:area,reason:reason,addtime:addtime},
+            success:function(data){
+                console.log(data);
+                if(data.code==0){
+                    layer.msg(data.msg, {icon: 2,time: 2000 })
+                }else{
+                    $('#updateL').modal('hide');
+                    layer.msg(data.msg, {icon: 1,time: 1000},function(){location.reload();})
+                }
+            }
+        });
+ }
+//删除
+function delect(url,auth_group){
+     $('#url').val(url);//给会话中的隐藏属性URL赋值
+        $('#delcfmModel').modal();
+        var text = '确定删除《'+auth_group+'》的田间操作吗？';
+        $('#tishi').text(text);
+}
+function urlSubmit(){
+        var url=$.trim($("#url").val());//获取会话中的隐藏属性URL
+        $.ajax({
+            url: url,
+            type: 'get',
+            success:function(data){
+                console.log(data);
+                if(data.code==0){
+                    layer.msg(data.msg, { icon: 2,time: 2000})
+                }else{
+                    layer.msg(data.msg, {icon: 1,time: 2000},function(){location.reload(); })
+                }
+            }
+        });
+    }
+</script>
+
+<script>
+$('.addtime').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true
+}); 
+    //时间格式化
+    function ge(m){return m<10?'0'+m:m }
+//添加施肥操作
+    function addfer(){
+        var formula = $('#formula').val();
+        var dosage = $('#dosage').val();
+        var area = $('#_area').val();
+        var brand = $('#brand').val();
+        var supplier = $('#supplier').val();
+        var kind = $('#kind').val();
+        var addtime = $('#_addtime').val();
+        var cropflow_id = $('#_cropflow_id').val();
+    $.ajax({
+            url: "{:url('admin/Action/addfer')}",
+            type: 'post',
+            dataType: 'json',
+            data: {formula:formula,dosage:dosage,area:area,brand:brand,supplier:supplier,kind:kind,addtime:addtime,cropflow_id:cropflow_id},
+            success:function(data){
+                console.log(data);
+                if(data.code==0){
+                    layer.msg(data.msg, {
+                        icon: 2,
+                        time: 2000
+                    })
+                }else{
+                    $('#addS').modal('hide');
+                    layer.msg(data.msg, {
+                        icon: 1,
+                        time: 2000
+                    },function(){
+                        location.reload();
+                    })
+                }
+            }
+        });
+    }
+        //表单重置
+    $(function () { $('#addS').on('hidden.bs.modal', function () {
+        console.log(11);
+        $("input[name='res']").click();
+    })
+    });
+//修改展示
+function edits(id){
+ $('#id').val(id);
+      console.log(id);
+    $.ajax({ url: "{:url('admin/Action/edits')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id: id},
+            success:function(data){
+             console.log(data);
+            $('#formula_').val(data.formula);
+            $('#dosage_').val(data.dosage);
+            $('#_area_').val(data.area);
+            $('#brand_').val(data.brand);
+            $('#supplier_').val(data.supplier);
+            $('#kind_').val(data.kind);
+            $('#add_time').val(data.addtime);
+            $('#cropflow').val(data.cropflow_id);
+            }
+        });
+        $("#updateS").modal('show');
+}
+ //修改
+ function updatefer(){
+         var id = $('#id').val();
+         var formula=$('#formula_').val();
+         var dosage=$('#dosage_').val();
+         var area=$('#_area_').val();
+         var brand=$('#brand_').val();
+         var supplier=$('#supplier_').val();
+         var kind=$('#kind_').val();
+         var addtime=$('#add_time').val();
+        $.ajax({
+            url: "{:url('admin/Action/updatefer')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id: id,formula:formula,dosage: dosage,area:area,brand:brand,addtime:addtime,supplier:supplier,kind:kind},
+            success:function(data){
+                console.log(data);
+                if(data.code==0){
+                    layer.msg(data.msg, {
+                        icon: 2,
+                        time: 2000
+                    })
+                }else{
+                    console.log(data);
+                    $('#updateS').modal('hide');
+                    layer.msg(data.msg, {
+                        icon: 1,
+                        time: 1000
+                    },function(){
+                        location.reload();
+                    })
+                }
+            }
+        });
+ }
+//删除
+function delects(url,auth_group){
+     $('#url').val(url);//给会话中的隐藏属性URL赋值
+        $('#delcfmModel').modal();
+        var text = '确定删除《'+auth_group+'》的施肥操作吗？';
+        $('#tishi').text(text);
+}
+
+</script>
+
+<script>
+//添加施药操作
+    function adddelive(){
+        var harm = $('#harm').val();
+        var area = $('#areaD').val();
+        var agentia = $('#agentia').val();
+        var potions = $('#potions').val();
+        var brand = $('#brandD').val();
+        var addtime = $('#addtimeD').val();
+        var cropflow_id = $('#cropflowid').val();
+        //var batch_id = $('#batchid').val();
+        $.ajax({
+            url: "{:url('admin/Action/delive')}",
+            type: 'post',
+            dataType: 'json',
+            data: {harm:harm,agentia:agentia,area:area,brand:brand,potions:potions,addtime:addtime,cropflow_id:cropflow_id},
+            success:function(data){
+                console.log(data);
+                if(data.code==0){
+                    layer.msg(data.msg, {
+                        icon: 2,
+                        time: 2000
+                    })
+                }else{
+                    $('#addD').modal('hide');
+                    layer.msg(data.msg, {
+                        icon: 1,
+                        time: 2000
+                    },function(){
+                        location.reload();
+                    })
+                }
+            }
+        });
+    }
+        //表单重置
+    $(function () { $('#addD').on('hidden.bs.modal', function () {
+        console.log(11);
+        $("input[name='res']").click();
+    })
+    });
+//修改展示
+function editd(id){
+ $('#id').val(id);
+    $.ajax({ url: "{:url('admin/Action/editd')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id: id},
+            success:function(data){
+             //console.log(data);
+            $('#harm_').val(data.harm);
+            $('#areaD_').val(data.area);
+            $('#agentia_').val(data.agentia);
+            $('#brandD_').val(data.brand);
+            $('#potions_').val(data.potions);
+            $('#addtimeD_').val(data.addtime);
+            $('#cropflowid_').val(data.cropflow_id);
+            }
+        });
+        $("#updateD").modal('show');
+
+}
+
+
+
+ //修改
+ function updatedelive(){
+        var id = $('#id').val();
+        var harm = $('#harm_').val();
+        var area = $('#areaD_').val();
+        var agentia = $('#agentia_').val();
+        var potions = $('#potions_').val();
+        var brand = $('#brandD_').val();
+        var addtime = $('#addtimeD_').val();
+        $.ajax({
+            url: "{:url('admin/Action/updatedelive')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id: id,harm:harm,agentia: agentia,area:area,brand:brand,addtime:addtime,potions:potions},
+            success:function(data){
+                console.log(data);
+                if(data.code==0){
+                    layer.msg(data.msg, {
+                        icon: 2,
+                        time: 2000
+                    })
+                }else{
+                    console.log(data);
+                    $('#updateD').modal('hide');
+                    layer.msg(data.msg, {
+                        icon: 1,
+                        time: 1000
+                    },function(){
+                        location.reload();
+                    })
+                }
+            }
+        });
+ }
+
+
+
+//删除
+function delectd(url,auth_group){
+     $('#url').val(url);//给会话中的隐藏属性URL赋值
+        $('#delcfmModel').modal();
+        var text = '确定删除《'+auth_group+'》的施药操作吗？';
+        $('#tishi').text(text);
+}
+
+</script>
+
+
+<script>
+//添加灌溉操作
+    function addirr(){
+        var area = $('#areaI').val();
+        var addtime = $('#addtimeI').val();
+        var cropflow_id = $('#cropflowidI').val();
+        var volume = $('#volume').val();
+        var regime = $('#regime').val();
+     //var batch_id = $('#batchid').val();
+        $.ajax({
+            url: "{:url('admin/Action/addirr')}",
+            type: 'post',
+            dataType: 'json',
+            data: {volume:volume,regime:regime,area:area,addtime:addtime,cropflow_id:cropflow_id},
+            success:function(data){
+                console.log(data);
+                if(data.code==0){
+                    layer.msg(data.msg, {
+                        icon: 2,
+                        time: 2000
+                    })
+                }else{
+                    $('#addI').modal('hide');
+                    layer.msg(data.msg, {
+                        icon: 1,
+                        time: 2000
+                    },function(){
+                        location.reload();
+                    })
+                }
+            }
+        });
+    }
+        //表单重置
+             //表单重置
+    $(function () { $('#addI').on('hidden.bs.modal', function () {
+        console.log(11);
+        $("input[name='res']").click();
+    })
+    });
+//修改展示
+function editi(id){
+ $('#id').val(id);
+    $.ajax({ url: "{:url('admin/Action/editi')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id: id},
+            success:function(data){
+             //console.log(data);
+            $('#areaI_').val(data.area);
+            $('#addtimeI_').val(data.addtime);
+            $('#cropflowidI_').val(data.cropflow_id);
+            $('#volume_').val(data.volume);
+            $('#regime_').val(data.regime);
+            }
+        });
+        $("#updateI").modal('show');
+
+}
+
+
+
+ //修改
+ function updateirr(){
+        var id = $('#id').val();
+        var area = $('#areaI_').val();
+        var addtime = $('#addtimeI_').val();
+       var volume = $('#volume_').val();
+        var regime = $('#regime_').val();
+        $.ajax({
+            url: "{:url('admin/Action/updateirr')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id:id,volume:volume,regime:regime,area:area,addtime:addtime},
+            success:function(data){
+                console.log(data);
+                if(data.code==0){
+                    layer.msg(data.msg, {
+                        icon: 2,
+                        time: 2000
+                    })
+                }else{
+                    console.log(data);
+                    $('#updateI').modal('hide');
+                    layer.msg(data.msg, {
+                        icon: 1,
+                        time: 1000
+                    },function(){
+                        location.reload();
+                    })
+                }
+            }
+        });
+ }
+
+
+
+//删除
+function delecti(url,auth_group){
+     $('#url').val(url);//给会话中的隐藏属性URL赋值
+        $('#delcfmModel').modal();
+        var text = '确定删除《'+auth_group+'》的灌溉操作吗？';
+        $('#tishi').text(text);
+}
+
+</script>
+<script>
+//添加施药配方
+    function addpest(){
+        var formual = $('#formualP').val();
+        var element = $('#element').val();
+        //var cropflow_id = $('#cropflowidI').val();
+        var proportion = $('#proportion').val();
+       
+     //var batch_id = $('#batchid').val();
+        $.ajax({
+            url: "{:url('admin/Action/addpest')}",
+            type: 'post',
+            dataType: 'json',
+            data: {formual:formual,element:element,proportion:proportion},
+            success:function(data){
+                console.log(data);
+                if(data.code==0){
+                    layer.msg(data.msg, {
+                        icon: 2,
+                        time: 2000
+                    })
+                }else{
+                    $('#addP').modal('hide');
+                    layer.msg(data.msg, {
+                        icon: 1,
+                        time: 2000
+                    },function(){
+                        location.reload();
+                    })
+                }
+            }
+        });
+    }
+       
+       //表单重置
+    $(function () { $('#addP').on('hidden.bs.modal', function () {
+        console.log(11);
+        $("input[name='res']").click();
+    })
+    });
+//修改展示
+function editp(id){
+ $('#id').val(id);
+    $.ajax({ url: "{:url('admin/Action/editp')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id: id},
+            success:function(data){
+             //console.log(data);
+            $('#formualP_').val(data.formual);
+            $('#element_').val(data.element);
+            $('#proportion_').val(data.proportion);
+            }
+        });
+        $("#updateP").modal('show');
+
+}
+
+
+
+ //修改
+ function updatepest(){
+        var id = $('#id').val();
+          var formual = $('#formualP_').val();
+        var element = $('#element_').val();
+        //var cropflow_id = $('#cropflowidI').val();
+        var proportion = $('#proportion_').val();
+      
+        $.ajax({
+            url: "{:url('admin/Action/updatepest')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id:id,formual:formual,element:element,proportion:proportion},
+            success:function(data){
+                //console.log(data);
+                if(data.code==0){
+                    layer.msg(data.msg, {
+                        icon: 2,
+                        time: 2000
+                    })
+                }else{
+                    console.log(data);
+                    $('#updateP').modal('hide');
+                    layer.msg(data.msg, {
+                        icon: 1,
+                        time: 1000
+                    },function(){
+                        location.reload();
+                    })
+                }
+            }
+        });
+ }
+
+
+
+//删除
+function delcfm(url,auth){
+       $('#url').val(url);//给会话中的隐藏属性URL赋值
+        $('#delcfmModel').modal();
+        var text = '确定删除配方《'+auth+'》的操作吗？';
+        $('#tishi').text(text);
+  
+   
+}
+
+</script>
+ {/block}

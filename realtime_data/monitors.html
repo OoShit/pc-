@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地块监控</title>
+    <link href="__css__/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="__css__/setMonitor.css">
+</head>
+
+<body>
+<script src="__js__/jquery-3.1.1.min.js"></script>
+<script src="__js__/bootstrap.min.js"></script>
+<script src="__js__/monitor/webVideoCtrl.js"></script>
+<script src="__js__/monitor/demo.js"></script>
+<script src="__js__/authcode.js"></script>
+<script>
+    $(function(){
+        if(checkPlugin() != false) {
+            if(initPlugin($('#videoBoxs').width(),940) != false) {
+                changeWndNum('{$WndNum}');
+                var password = authcode('{$user.password}',"{$Think.config.salt}");
+                clickLogin('{$user.server_ip}','{$user.port}','{$user.username}',password,'','');
+            }
+        }
+    });
+    function showVideo(channels,index){
+        var tasks = function(){
+            StartVariousRealPlay('{$user.server_ip}',1,channels,index);
+        };
+        setTimeout(tasks,1000);
+    }
+    window.onbeforeunload = onbeforeunload_handler;
+    function onbeforeunload_handler() {
+        clickLogout("{$user.server_ip}");
+    }
+</script>
+    <div class="video-boxs">
+        <div class="row" id="videoBoxs">
+            <div class="video" id="divPlugin"></div>
+            {php}$m = 0;{/php}
+            {volist name='$data' id='vo'}
+            <script>
+                showVideo('{$vo.channels}','{$m}');
+            </script>
+            {php}$m++;{/php}
+            {/volist}
+
+           <!-- <div class="col-md-4">
+                <video autoplay="autoplay">
+                    <source src="__video__/1.mp4" type="video/mp4">
+                </video>
+                <div class="video-tools">
+                    <img src="__img__/icon/setting.png" class="video-setting">
+                </div>
+            </div>-->
+        </div><!-- row -->
+    </div>
+<script type="text/javascript">
+    window.onload =function(){
+        var dataInt ={"data":
+        [{"src":"__video__/1.mp4"},{"src":"__video__/1.mp4"}]};
+
+        window.onscroll =function(){
+            console.log(checkScrollSlide());
+            if (checkScrollSlide()) {
+                var oParent =$('#videoBoxs');
+               //将数据块渲染到页面的尾部
+               for(var i=0;i<dataInt.data.length;i++){
+                var oCol ='<div class="col-md-4"> <video autoplay="autoplay"><source src="' +dataInt.data[i].src +'" type="video/mp4"> </video><div class="video-tools"><img src="__img__/icon/setting.png" class="video-setting"></div></div>';
+                oParent.append(oCol);
+               }
+            }
+        }//onscroll
+        //检测是否具备了滚条加载数据库的条件
+        function checkScrollSlide(){
+          var oParent =$('#videoBoxs');
+          var oRows =oParent.find('.row');
+          var lastRowH =oRows[oRows.length -1].offset().top+50;
+          var scrollTop =document.body.scrollTop ||document.documentElement.scrollTop;
+          var Bheight =document.body.clientHeight ||document.documentElement.clientHeight;
+          console.log(Bheight);
+          console.log(scrollTop);
+          return (lastRowH <scrollTop +Bheight)?true:false;
+        }
+    }
+</script>
+</body>
+</html>

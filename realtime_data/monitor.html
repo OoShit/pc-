@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>监控</title>
+    <link href="__css__/plugins/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="__css__/setMonitor.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+    <meta http-equiv="Expires" content="0" />
+    <script>
+        document.write("<link type='text/css' href='__js__/monitor/demo.css?version=" + new Date().getTime() + "' rel='stylesheet' />");
+    </script>
+</head>
+
+<body>
+    <div class="video-box clearfix">
+        <div class="video" id="divPlugin">
+
+        </div>
+        <div class="video-tools">
+            <div class="left">
+                <fieldset class="preview">
+                    <legend>预览</legend>
+                    <table cellpadding="0" cellspacing="3" border="0">
+                        <tr>
+                            <td colspan="3">
+                                <input type="button" class="btn" value="抓图" onclick="clickCapturePic();" />
+                                <input type="button" class="btn" value="开始录像" onclick="clickStartRecord();" />
+                                <input type="button" class="btn" value="停止录像" onclick="clickStopRecord();" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <input type="button" class="btn2" value="启用电子放大" onclick="clickEnableEZoom();" />
+                                <input type="button" class="btn2" value="禁用电子放大" onclick="clickDisableEZoom();" />
+                                <input type="button" class="btn2" value="启用3D放大" onclick="clickEnable3DZoom();" />
+                                <input type="button" class="btn2" value="禁用3D放大" onclick="clickDisable3DZoom();" />
+                                <input type="button" class="btn" value="全屏" onclick="clickFullScreen();" />
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset class="ptz">
+                    <legend>云台控制</legend>
+                    <table cellpadding="0" cellspacing="3" border="0" class="left">
+                        <tr>
+                            <td>
+                                <input type="button" class="btn" value="左上" onmousedown="mouseDownPTZControl(5);" onmouseup="mouseUpPTZControl();" />
+                                <input type="button" class="btn" value="上" onmousedown="mouseDownPTZControl(1);" onmouseup="mouseUpPTZControl();" />
+                                <input type="button" class="btn" value="右上" onmousedown="mouseDownPTZControl(7);" onmouseup="mouseUpPTZControl();" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="button" class="btn" value="左" onmousedown="mouseDownPTZControl(3);" onmouseup="mouseUpPTZControl();" />
+                                <input type="button" class="btn" value="自动" onclick="mouseDownPTZControl(9);" />
+                                <input type="button" class="btn" value="右" onmousedown="mouseDownPTZControl(4);" onmouseup="mouseUpPTZControl();" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="button" class="btn" value="左下" onmousedown="mouseDownPTZControl(6);" onmouseup="mouseUpPTZControl();" />
+                                <input type="button" class="btn" value="下" onmousedown="mouseDownPTZControl(2);" onmouseup="mouseUpPTZControl();" />
+                                <input type="button" class="btn" value="右下" onmousedown="mouseDownPTZControl(8);" onmouseup="mouseUpPTZControl();" />
+                            </td>
+                        </tr>
+                    </table>
+                    <table cellpadding="0" cellspacing="3" border="0" class="left">
+                        <tr>
+                            <td class="tt">云台速度</td>
+                            <td>
+                                <select id="ptzspeed" class="sel">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option selected>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tt">预置点号</td>
+                            <td><input id="preset" type="text" class="txt" value="1" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="button" class="btn" value="设置" onclick="clickSetPreset();" />
+                                <input type="button" class="btn" value="调用" onclick="clickGoPreset();" />
+                            </td>
+                        </tr>
+                    </table>
+                    <table cellpadding="0" cellspacing="3" border="0" class="left">
+                        <tr>
+                            <td class="tt"><input type="button" class="btn2" value="变倍+" onmousedown="PTZZoomIn()" onmouseup="PTZZoomStop()"></td>
+                            <td><input type="button" class="btn2" value="变倍-" onmousedown="PTZZoomout()" onmouseup="PTZZoomStop()"></td>
+                        </tr>
+                        <tr>
+                            <td class="tt"><input type="button" class="btn2" value="变焦+" onmousedown="PTZFocusIn()" onmouseup="PTZFoucusStop()"></td>
+                            <td><input type="button" class="btn2" value="变焦-" onmousedown="PTZFoucusOut()" onmouseup="PTZFoucusStop()"></td>
+                        </tr>
+                        <tr>
+                            <td class="tt"><input type="button" class="btn2" value="光圈+" onmousedown="PTZIrisIn()" onmouseup="PTZIrisStop()"></td>
+                            <td><input type="button" class="btn2" value="光圈-" onmousedown="PTZIrisOut()" onmouseup="PTZIrisStop()"></td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset class="playback">
+                    <legend>回放</legend>
+                    <table width="100%" cellpadding="0" cellspacing="3" border="0">
+                        <tr>
+                            <td class="tt">开始时间</td>
+                            <td>
+                                <input id="starttime" type="text" class="txt" value="2013-12-10 00:00:00" />（时间格式：2013-11-11 12:34:56）
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tt">结束时间</td>
+                            <td>
+                                <input id="endtime" type="text" class="txt" value="2013-12-11 23:59:59" />
+                                <input type="button" class="btn" value="搜索" onclick="clickRecordSearch(0,'{$user_info.server_ip}','{$camera_info.channels}');" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="searchdiv">
+                                    <table id="searchlist" class="searchlist" cellpadding="0" cellspacing="0" border="0"></table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="button" class="btn2" value="开始回放" onclick="clickStartPlayback('{$user_info.server_ip}','{$camera_info.channels}');" />
+                                <input type="button" class="btn2" value="停止回放" onclick="clickStopPlayback('{$user_info.server_ip}','{$camera_info.channels}');" />
+                                <input type="button" class="btn" value="倒放" onclick="clickReversePlayback('{$user_info.server_ip}','{$camera_info.channels}');" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="button" class="btn" value="暂停" onclick="clickPause();" />
+                                <input type="button" class="btn" value="恢复" onclick="clickResume();" />
+                                <input type="button" class="btn" value="慢放" onclick="clickPlaySlow();" />
+                                <input type="button" class="btn" value="快放" onclick="clickPlayFast();" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="button" class="btn" value="抓图" onclick="clickCapturePic();" />
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset class="operate">
+                    <legend>操作信息</legend>
+                    <div id="opinfo" class="opinfo"></div>
+                </fieldset>
+            </div>
+            <!--<div class="tools-show">
+                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            </div>
+            <div class="tools-control">
+                <img src="__img__/tools/up.png" class="control-up">
+                <img src="__img__/tools/right.png" class="control-right">
+                <img src="__img__/tools/down.png" class="control-down">
+                <img src="__img__/tools/left.png" class="control-left">
+            </div>
+            <div class="tools-deal">
+                <div class="row clearfix">
+                    <div class="deal-enlarge">
+                        <img src="__img__/tools/enlarge.png">
+                        <h3>放大</h3>
+                    </div>
+                    <div class="deal-reduce">
+                        <img src="__img__/tools/reduce.png">
+                        <h3>缩小</h3>
+                    </div>
+                </div>
+                <div class="row clearfix">
+                    <div class="deal-captrue">
+                        <img src="__img__/tools/capture.png">
+                        <h3>抓拍</h3>
+                    </div>
+                    <div class="deal-playback">
+                        <img src="__img__/tools/playback.png">
+                        <h3>回放</h3>
+                    </div>
+                </div>
+            </div>-->
+        </div>
+    </div>
+
+<script src="__js__/jquery-3.1.1.min.js"></script>
+<script src="__js__/layer/layer.js"></script>
+<script src="__js__/monitor/webVideoCtrl.js"></script>
+<script src="__js__/monitor/demo.js"></script>
+<script src="__js__/authcode.js"></script>
+<script type="text/javascript">
+// var docH = (document.body.clientHeight || document.documentElement.clientHeight) - 20;
+// var docW = document.body.clientWidth || document.documentElement.clientWidth;
+// // alert(docH);
+// CKobject.embedHTML5('a1','ckplayer_a1',docW,docH,video,flashvars,support);
+$('.tools-show').on('click', function() {
+    if ($(this).find('i').hasClass('fa-angle-double-right')) {
+        $(this).parents('.video-tools').animate({
+            right: '-390px'
+        }, 'slow');
+        $(this).find('.fa').removeClass('fa-angle-double-right').addClass('fa-angle-double-left');
+    } else {
+        $(this).parents('.video-tools').animate({
+            right: '0px'
+        }, 'slow');
+        $(this).find('.fa').removeClass('fa-angle-double-left').addClass('fa-angle-double-right');
+    }
+});
+</script>
+<script>
+    $(function(){
+        var user = JSON.parse('{$user_info_}');
+        var camera =JSON.parse( '{$camera_info_}');
+        if(user.length == 0){
+            layer.msg('该地块下无监控设备！', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(camera.length == 0){
+            layer.msg('该传感器无对应的监控设备！', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        var ip = user.server_ip;
+        var port = user.port;
+        var username = user.username;
+        var password = authcode(user.password,"{$Think.config.salt}");
+        var streamtype = 1;
+        var channels = camera.channels;
+        var status = camera.status;
+        if(status != 1){
+            layer.msg('监控设备未启用！', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(checkPlugin() != false) {
+            if(initPlugin(1422, 910) != false) {
+                var start = function () {
+                    clickLogin(ip, port, username, password, streamtype, channels);
+                };
+                setTimeout(start, 300);
+            }
+        }
+    });
+    window.onbeforeunload = onbeforeunload_handler;
+    function onbeforeunload_handler() {
+        clickLogout("{$user_info.server_ip}");
+    }
+
+</script>
+</body>
+
+</html>

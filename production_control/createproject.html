@@ -1,0 +1,419 @@
+{extend name="base" /} {block name="css"}
+<link rel="stylesheet" type="text/css" href="__css__/productionControl.css">
+<link rel="stylesheet" type="text/css" href="__css__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css">
+<link rel="stylesheet" href="__css__/ztree-metro-style.css">{/block} {block name="content"}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="row gray-bg">
+        <ol class="breadcrumb">
+            <li><a href="#" class="active"><i class="fa fa-home"></i>创建生产计划</a></li>
+        </ol>
+    </div>
+    <div class="row park-wrapper">
+        <div class="contain form-line">
+            <div class="flow-path row">
+                <div class="col-lg-4">
+                    <h4 class="path-title active"><span class="path-bg">1</span>第一步:创建生产计划</h4>
+                    <img src="__img__/icon/arrRight.png">
+                </div>
+                <div class="col-lg-4">
+                    <h4 class="path-title"><span class="path-bg">2</span>第二步:投入记录</h4>
+                    <img src="__img__/icon/arrRight.png">
+                </div>
+                <div class="col-lg-4">
+                    <h4 class="path-title"><span class="path-bg">3</span>第三步:水肥策略</h4>
+                </div>
+            </div>
+            <div class="flow-content row">
+                <div class="col-lg-5">
+                    <form class="form-horizontal" role="form" action="{:url('devotion')}" method="post" id="form">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="pici">生产批次:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="pici" readonly name="batch" value="{$new_batch}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="pici">批次名称:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="batch_name" name="batch_name" placeholder="请输入批次名称">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="pici">种植区域:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" onclick="showAreaInfo()" id="planting_area" readonly placeholder="点击选择种植区域">
+                                <input type="hidden" id="planting_area_id" name="planting_area">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="pici">种植面积:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="planting_acreage" readonly placeholder="种植面积(单位 ㎡)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="start">种植时间:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="start" name="start_time" readonly onchange="clearDiv()" placeholder="点击选择种植时间">
+                                <input type="hidden" class="form-control" id="end_time" name="end_time">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="breed">作物品种:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="breed" onchange="getCroplist(this)">
+                                    <option value="">请选择作物种类</option>
+                                    {volist name='$croptype' id='vo'}
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="crop">作物名称:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="crop" name="crop_id" onchange="clearDiv()">
+                                    <option value="">作物选择</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="pici">目标产量:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="target_output" name="target_output" placeholder="请输入目标产量">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="pici">计划经费:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="planned_expenditure" name="planned_expenditure" placeholder="请输入计划经费(单位元)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="flow">流程模板:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="flow" name="flow_id" onchange="clearDiv()">
+                                    <option value="">流程模板选择</option>
+                                    {volist name='$model' id='vo'}
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row create-flow">
+                            <input type="hidden" id="html" name="html">
+                            <button type="button" class="btn btn-border" onclick="flowImg()"><img src="__img__/icon/flow.png">流程图生成</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-7">
+                   <div class="perid" id="flowimg">
+
+                   </div>
+                </div>
+            </div>
+        </div>
+        <footer class="step">
+            <button class="btn btn-primary btn-lg" onclick="nextWeb()">下一步</button>
+        </footer>
+    </div>
+</div>
+
+<!-- 种植区域选择modal -->
+<div class="modal fade" id="p_area" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 300px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">种植区域选择</h4>
+            </div>
+            <div class="modal-body">
+                <ul id="tree" class="ztree"></ul>
+            </div>
+            <input type="hidden" id="s_id" name="id">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" id="auth-btn"  onclick="p_area()" class="btn btn-primary">确认</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- #page-wrapper -->
+{/block} {block name="js"}
+<script src="__js__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="__js__/plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>{/block} {block name="script"}
+<script src="__js__/jquery.cookie.js"></script>
+<script src="__js__/jquery.ztree.all.min.js"></script>
+<script type="text/javascript">
+    //获取作物列表
+    function getCroplist(obj){
+        $('#flowimg').children().remove();
+        var crop_type = $(obj).val();
+        if(crop_type != ''){
+            var option = '';
+            $.ajax({
+                url: "{:url('admin/ProductionControl/getCroplist')}",
+                type: 'post',
+                dataType: 'json',
+                data: {crop_type: crop_type},
+                success:function(data){
+                    $.each(data,function(k,v){
+                        option += '<option value="'+v.id+'">'+ v.name+'</option>';
+                    });
+                    $('#crop option:gt(0)').remove();
+                    $('#crop').append(option);
+                }
+            })
+        }
+    }
+    //生成流程图
+    function flowImg(){
+        //var crop_type = $('#breed').val();
+        var batch_name = $('#batch_name').val();
+        var planting_area = $('#planting_area_id').val();
+        var crop_id = $('#crop').val();
+        var crop_name= $('#crop').children('option').eq(document.getElementById('crop').selectedIndex).text();
+        var target_output = $('#target_output').val();
+        var planned_expenditure = $('#planned_expenditure').val();
+        var model_id = $('#flow').val();
+        var start_time = $('#start').val();
+        if(batch_name == ''){
+            layer.msg('请填写批次名称', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(planting_area == ''){
+            layer.msg('请选择种植区域', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(start_time == ''){
+            layer.msg('请填写种植时间', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(crop_id == ''){
+            layer.msg('请选择作物', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(target_output == ''){
+            layer.msg('请填写目标产量', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(planned_expenditure == ''){
+            layer.msg('请填写计划经费', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }else if(isNaN(planned_expenditure)){
+            layer.msg('计划经费只能是数字', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(model_id == ''){
+            layer.msg('请选择流程模版', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        var div_a = '';
+        var div_b = '';
+        var div_c = '';
+        var div_d = '';
+        $.ajax({
+            url: "{:url('admin/ProductionControl/getFlowInfo')}",
+            type: 'post',
+            dataType: 'json',
+            data: {crop_id: crop_id,model_id: model_id,start_time: start_time},
+            success:function(data){
+                var len = data.length;
+                $('#end_time').val(data[len-1]['end_time']);
+                div_a = '<h5 class="perid-text">'+crop_name+'生长周期图</h5>'+
+                        '<div class="perid-content clearfix">';
+                $.each(data,function(k,v){
+                    var date = new Date(v.end_time);
+                    var shijian = ge(date.getMonth()+1)+'月'+ge(date.getDate())+'日';
+                    if(k == len-1){
+                        div_c = '<div class="cycle">'+
+                                    '<img src="'+ v.img+'">'+
+                                    '<p class="cycle-info">'+ v.name+'</p>'+
+                                    '<p class="cycle-time">['+ shijian+'结束]</p>'+
+                                '</div>';
+                    }else{
+                        div_b +=  '<div class="cycle">'+
+                                    '<img src="'+ v.img+'">'+
+                                    '<p class="cycle-info">'+ v.name+'</p>'+
+                                    '<p class="cycle-time">['+ shijian+'结束]</p>'+
+                                  '</div>'+
+                                  '<div class="cycle-line"></div>';
+                    }
+                });
+                div_d = '</div>';
+                var div = div_a + div_b + div_c + div_d;
+                //$('#flowimg').children().remove();
+                //$('#flowimg').children().length;
+                $('#flowimg').html(div);
+            }
+        })
+    }
+    //时间格式化
+    function ge(m){return m<10?'0'+m:m }
+    //
+    function clearDiv(){
+        $('#flowimg').children().remove();
+    }
+    //跳转下一步
+    function nextWeb(){
+        var len = $('#flowimg').children().length;
+        if(len==0){
+            layer.msg('尚未生成流程图', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        //为作物品种下拉设置selected属性
+        $("#breed").find("option[value="+$('#breed').val()+"]").attr("selected",true);
+        //为作物列表下拉设置selected属性
+        $("#crop").find("option[value="+$('#crop').val()+"]").attr("selected",true);
+        //为流程模版下拉设置selected属性
+        $("#flow").find("option[value="+$('#flow').val()+"]").attr("selected",true);
+        //为开始时间input设置value
+        $('#start').attr('value',$('#start').val());
+        //为批次名称input设置value
+        $('#batch_name').attr('value',$('#batch_name').val());
+        //为种植区域input设置value
+        $('#planting_area').attr('value',$('#planting_area').val());
+        //为种植区域id集合input设置valueplanting_acreage
+        $('#planting_area_id').attr('value',$('#planting_area_id').val());
+        //为种植面积input设置value
+        $('#planting_acreage').attr('value',$('#planting_acreage').val());
+        //为目标产量input设置value
+        $('#target_output').attr('value',$('#target_output').val());
+        //为计划经费input设置value
+        $('#planned_expenditure').attr('value',$('#planned_expenditure').val());
+        var a = document.documentElement.outerHTML;
+        //console.log(HTMLEncode(a));
+        $('#html').val(htmlEncode(a));
+        $('#form').submit();
+    }
+    //转义html标签
+    function htmlEncode(value){
+        return $('<div/>').text(value).html();
+    }
+
+    var tree = $("#tree");
+    var zTree;
+    // zTree 配置项
+    var setting = {
+        check: {
+            enable: true
+        },
+        view: {
+            dblClickExpand: false,
+            showLine: true,
+            showIcon: false,
+            selectedMulti: false
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "id",
+                pIdKey: "pid",
+                rootpid: ""
+            },
+            key: {
+                name: "name"
+            }
+        }
+    };
+var checked = [];
+    function showAreaInfo() {
+        $("#p_area").modal('show');
+        $.ajax({
+            url: "{:url('admin/ProductionControl/getParkTree')}",
+            type: "post",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                if(checked.length != 0){
+                    $.each(data,function(k,v){
+                        if($.inArray(v.id.toString(),checked) != -1){data[k]['checked'] = true}
+                    })
+                }
+                zTree = $.fn.zTree.init(tree, setting, data);
+            }
+        });
+    }
+
+    //种植区域选择
+
+    function p_area(){
+        var land_id = '',land_name = '',checked_pro,checked_ids = '',m = 0;
+        checked_pro = zTree.getCheckedNodes(); // 获取当前选中的checkbox
+        $.each(checked_pro,function(k,v){
+            checked_ids += v.id + ',';
+            if("undefined" != typeof v.land_id){
+                m++;
+                land_id += v.land_id+',';
+                land_name += v.name+',';
+            }
+        });
+        var checked_len = checked_ids.length;
+        checked = checked_ids.substr(0,checked_len-1).split(',');
+        var id_len = land_id.length;
+        var land_ids = land_id.substr(0,id_len-1);
+        $('#planting_area').val('已选择'+m+'个地块，点击查看');
+        $('#planting_area_id').val(land_ids);
+        $("#p_area").modal('hide');
+        $.ajax({
+            url: "{:url('admin/ProductionControl/getPlantingAcreage')}",
+            type: "post",
+            cache: false,
+            dataType:'json',
+            data: {land_ids: land_ids},
+            success: function (data) {
+                if(m == 0){
+                    $('#planting_acreage').val('0 ㎡');
+                }else{
+                    $('#planting_acreage').val(data.planting_acreage+' ㎡');
+                }
+            }
+        });
+    }
+
+    $(document).on("show.bs.modal", ".modal", function(){
+        $(this).draggable({
+//        handle: ".modal-header"   // 只能点击头部拖动
+        });
+        $(this).css("overflow", "hidden"); // 防止出现滚动条，出现的话，你会把滚动条一起拖着走的
+    });
+</script>
+<script type="text/javascript">
+    $('#start').datetimepicker({
+        language: 'zh-CN',
+        format: 'yyyy-mm-dd',
+        weekStart: 1,
+        startView: 2,
+        minView: 2,
+        todayBtn: true
+    });
+</script>
+{/block}

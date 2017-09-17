@@ -1,0 +1,381 @@
+{extend name="base" /} {block name="css"}
+<link rel="stylesheet" type="text/css" href="__css__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css"> {/block} {block name="js"}
+<script src="__js__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="__js__/plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+{/block} {block name="content"}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="row gray-bg">
+        <ol class="breadcrumb">
+            <li><a href="#" class="active"><i class="fa fa-home"></i>数据报表</a></li>
+        </ol>
+    </div>
+    <div class="row park-wrapper">
+        <h4 class="park-title">数据报表</h4>
+    </div>
+    <div class="row">
+        <div class="select-wrapper">
+            <form role="form" class="form-inline clearfix">
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>设备类型</span>
+                        <i></i>
+                    </div>
+                    <ul class="doubleLi clearfix">
+                        <li><img src="__img__/index/a3.jpg">土壤温度</li>
+                        <li><img src="__img__/index/a3.jpg">二氧化碳浓度</li>
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>园区</span>
+                        <i></i>
+                    </div>
+                    <ul>
+                        <li>dd</li>
+                        <li>dd</li>
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>公司</span>
+                        <i></i>
+                    </div>
+                    <ul>
+                        <li>dd</li>
+                        <li>dd</li>
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>地块</span>
+                        <i></i>
+                    </div>
+                    <ul>
+                        <li>dd</li>
+                        <li>dd</li>
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>传感器</span>
+                        <i></i>
+                    </div>
+                    <ul>
+                        <li>dd</li>
+                        <li>dd</li>
+                    </ul>
+                </div>
+                <button class="btn btn-primary Research" type="submit">搜 索</button>
+            </form>
+        </div>
+    </div>
+    <div class="row park-wrapper">
+        <div class="col-md-3">
+            <div class="sbox">
+                <div class="sbox-header">查询记录</div>
+                <div class="sbox-content">
+                    <div class="record-list">
+                        <div class="record-li">
+                            <i></i>
+                            <a>土壤温度-昌江园区-第二个公司-玉米地块-en2</a>
+                            <span class="close-record fa fa-times"></span>
+                        </div>
+                        <div class="record-li">
+                            <i></i>
+                            <a>土壤温度-昌江园区-第二个公司-玉米地块-en2</a>
+                            <span class="close-record fa fa-times"></span>
+                        </div>
+                        <div class="record-li">
+                            <i></i>
+                            <a>土壤温度-昌江园区-第二个公司-玉米地块-en2</a>
+                            <span class="close-record fa fa-times"></span>
+                        </div>
+                        <div class="record-li">
+                            <i></i>
+                            <a>土壤温度-昌江园区-第二个公司-玉米地块-en2</a>
+                            <span class="close-record fa fa-times"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="sbox">
+                <div class="sbox-content">
+                    <div class="row">
+                        <div class="col-md-2 time-select">
+                            <ul class="half-round Tselect-date">
+                                <li class="active">本日</li>
+                                <li>七天</li>
+                                <li>15天</li>
+                                <li class="time-picker">自定义
+                                    <div class="timePicker-box">
+                                        <div class="Picker-select">
+                                            <span>从</span>
+                                            <input type="text" name="startTime" placeholder="开始时间" id="startTime1"  disabled="disabled">
+                                            <span>到</span>
+                                            <input type="text" name="endTime" placeholder="结束时间" id="endTime1"  disabled="disabled">
+                                            <button class="btn btn-sm cancel">取消</button>
+                                            <button class="btn btn-sm btn-primary ensure">确定</button>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="startTime-picker" data-date-format="dd-mm-yyyy"></div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="endTime-picker"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="half-round Tselect-sure">
+                                <li class="drop-down"><span>具体值</span><img src="__img__/icon/greyDown.png">
+                                    <ul>
+                                        <li class="active">具体值</li>
+                                        <li>时平均</li>
+                                        <li>日平均</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-10"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="select-wrapper">
+            <form role="form" class="form-inline clearfix">
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>设备类型</span>
+                        <i></i>
+                    </div>
+                    <ul class="doubleLi clearfix">
+                        <li><img src="__img__/index/a3.jpg">土壤温度</li>
+                        <li><img src="__img__/index/a3.jpg">二氧化碳浓度</li>
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>园区</span>
+                        <i></i>
+                    </div>
+                    <ul>
+                        <li>dd</li>
+                        <li>dd</li>
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>公司</span>
+                        <i></i>
+                    </div>
+                    <ul>
+                        <li>dd</li>
+                        <li>dd</li>
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>地块</span>
+                        <i></i>
+                    </div>
+                    <ul>
+                        <li>dd</li>
+                        <li>dd</li>
+                    </ul>
+                </div>
+                <div class="item selectUI">
+                    <div class="selectUI-text text">
+                        <span>传感器</span>
+                        <i></i>
+                    </div>
+                    <ul>
+                        <li>dd</li>
+                        <li>dd</li>
+                    </ul>
+                </div>
+                <button class="btn btn-primary Research" type="submit">搜 索</button>
+            </form>
+        </div>
+    </div>
+    <div class="row park-wrapper">
+        <div class="col-md-3">
+            <div class="sbox">
+                <div class="sbox-header">查询记录</div>
+                <div class="sbox-content">
+                    <div class="record-list no-record">
+                        <img src="__img__/tools/noRecord.png">
+                        <span>暂无查询记录</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="sbox">
+                <div class="sbox-content">
+                    <div class="row">
+                        <div class="col-md-2 time-select">
+                            <ul class="half-round Tselect-date">
+                                <li class="active">本日</li>
+                                <li>七天</li>
+                                <li>15天</li>
+                                <li class="time-picker">自定义
+                                    <div class="timePicker-box">
+                                        <div class="Picker-select">
+                                            <span>从</span>
+                                            <input type="text" name="startTime" placeholder="开始时间" id="startTime2" disabled="disabled">
+                                            <span>到</span>
+                                            <input type="text" name="endTime" placeholder="结束时间" id="endTime2" disabled="disabled">
+                                            <button class="btn btn-sm cancel">取消</button>
+                                            <button class="btn btn-sm btn-primary ensure">确定</button>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="startTime-picker2" data-date-format="dd-mm-yyyy"></div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="endTime-picker2"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="half-round Tselect-sure">
+                                <li class="drop-down"><span>具体值</span><img src="__img__/icon/greyDown.png">
+                                    <ul>
+                                        <li class="active">具体值</li>
+                                        <li>时平均</li>
+                                        <li>日平均</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-10"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #page-wrapper -->
+{/block} {block name="script"}
+<script type="text/javascript">
+$('.selectUI').on('click', function(event) {
+    event.preventDefault();
+    $(this).toggleClass('unfold').find('ul').toggle();
+    // console.log(event.target);
+    // console.log($(this).children('.selectUI-text'));
+    // if(event.target !==$(this).children('.selectUI-text')){
+    //     $(this).find('ul').hide();
+    // }
+});
+$('.selectUI ul li').on('click', function(event) {
+    $(this).closest('.selectUI').find('.selectUI-text').children('span').html($(this).html());
+});
+
+$('.Tselect-date').on('click','li',function(event){
+    $(this).toggleClass('active').siblings().removeClass('active');
+    $(this).siblings().find('.timePicker-box').hide();
+    if ($(this).hasClass('time-picker')) {
+        if (event.target == this) {
+            $(this).find('.timePicker-box').toggle();
+            // $(this).closest('.time-select').find('.drop-down ul').hide();
+        }
+    }
+
+    $(document).one('click',function(){
+        $('.time-picker').removeClass('active').find('.timePicker-box').hide();
+    })
+    event.stopPropagation();
+
+    $(this).closest('.time-select').find('.drop-down ul').hide();
+});
+$('.timePicker-box').on('click',function(e){
+    e.stopPropagation();
+});
+
+$('.Tselect-sure').on('click','li',function(event){
+    $(this).toggleClass('active').siblings().removeClass('active');
+    if ($(this).hasClass('drop-down')) {
+        $(this).find('ul').toggle();
+        $(this).children('span').text($(this).find('ul li.active').text());
+    }
+
+})
+// $('.time-select ul').on('click', 'li', function(event) {
+//     if (!$(this).hasClass('active')) {
+//         $(this).addClass('active').siblings().removeClass('active');
+//         $(this).siblings().find('.timePicker-box').hide();
+//     }
+//     if ($(this).hasClass('time-picker')) {
+//         if (event.target == this) {
+//             $(this).find('.timePicker-box').toggle();
+//             $(this).closest('.time-select').find('.drop-down ul').hide();
+//         }
+//     }
+//     if ($(this).hasClass('drop-down')) {
+//         $(this).find('ul').toggle();
+//         $(this).children('span').text($(this).find('ul li.active').text());
+//         $(this).closest('.time-select').find('.time-picker .timePicker-box').hide();
+//     }
+// });
+
+$('.close-record').on('click', function() {
+    $(this).closest('.record-li').remove();
+})
+$('.timePicker-box .cancel').on('click', function(event) {
+    event.stopPropagation();
+    $(this).closest('.timePicker-box').hide();
+
+});
+$('.startTime-picker').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true,
+    linkField: "startTime1",
+    linkFormat: 'yyyy-mm-dd'
+});
+$('.endTime-picker').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true,
+    linkField: "endTime1",
+    linkFormat: 'yyyy-mm-dd',
+    useCurrent:false
+});
+// $('.startTime-picker').datetimepicker().on('changeDate',function(ev){
+//     console.log($('#startTime1').val());
+//   $('.endTime-picker').datetimepicker('setStartDate',$('#startTime1').val());
+// })
+$('.startTime-picker2').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true,
+    linkField: "startTime2",
+    linkFormat: 'yyyy-mm-dd'
+});
+$('.endTime-picker2').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true,
+    linkField: "endTime2",
+    linkFormat: 'yyyy-mm-dd'
+});
+</script>
+{/block}

@@ -1,0 +1,128 @@
+{extend name="base" /} {block name="css"}
+<link rel="stylesheet" type="text/css" href="__css__/productionControl.css"> 
+<link rel="stylesheet" type="text/css" href="__css__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css"> {/block} {block name="content"}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="row gray-bg">
+        <ol class="breadcrumb">
+            <li><a href="#" class="active"><i class="fa fa-home"></i>创建生产计划</a></li>
+        </ol>
+    </div>
+    <div class="row park-wrapper">
+        <h4 class="park-title">创建生产计划</h4>
+        <div class="contain form-line">
+            <div class="flow-path row">
+                <div class="col-lg-4">
+                    <h4 class="path-title active"><span class="path-bg">1</span>第一步:创建生产计划</h4>
+                    <img src="__img__/icon/arrRight.png">
+                </div>
+                <div class="col-lg-4">
+                    <h4 class="path-title"><span class="path-bg">2</span>第二步:投入记录</h4>
+                    <img src="__img__/icon/arrRight.png">
+                </div>
+                <div class="col-lg-4">
+                    <h4 class="path-title"><span class="path-bg">3</span>第三步:水肥策略</h4>
+                </div>
+            </div>
+            <div class="flow-content row">
+                <div class="col-lg-5">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="pici">生产批次:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="pici" disabled placeholder="SH45678234">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="breed">品种:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="breed">
+                                    <option>SH45678234</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="crop">作物:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="crop">
+                                    <option>作物选择</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="flow">流程模板:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="flow">
+                                    <option>流程模板选择</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="start">开始时间:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="start">
+                            </div>
+                        </div>
+                        <div class="row create-flow">
+                            <button type="submit" class="btn btn-border"><img src="__img__/icon/flow.png">流程图生成</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-7">
+                   <div class="perid">
+                       <h5 class="perid-text">蔬菜生长周期图</h5>
+                       <div class="perid-content clearfix">
+                           <div class="cycle">
+                               <img src="__img__/cycle/cycle1.png">
+                               <p class="cycle-info">萌芽期</p>
+                               <p class="cycle-time">[01月24日结束]</p>
+                           </div>
+                           <div class="cycle-line"></div>
+                           <div class="cycle">
+                               <img src="__img__/cycle/cycle2.png">
+                               <p class="cycle-info">嫩芽期</p>
+                               <p class="cycle-time">[01月28日结束]</p>
+                           </div>
+                           <div class="cycle-line"></div>
+                            <div class="cycle">
+                               <img src="__img__/cycle/cycle3.png">
+                               <p class="cycle-info">新苗期</p>
+                               <p class="cycle-time">[03月24日结束]</p>
+                           </div>
+                            <div class="cycle-line"></div>
+                             <div class="cycle">
+                               <img src="__img__/cycle/cycle4.png">
+                               <p class="cycle-info">生长期</p>
+                               <p class="cycle-time">[03月24日结束]</p>
+                           </div>
+                           <div class="cycle-line"></div>
+                             <div class="cycle">
+                               <img src="__img__/cycle/cycle5.jpg">
+                               <p class="cycle-info">开花期</p>
+                               <p class="cycle-time">[03月24日结束]</p>
+                           </div>
+
+                       </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+        <footer class="step">
+            <button class="btn btn-primary btn-lg"><a href="{:url('devotion')}">下一步</a></button>
+        </footer>
+    </div>
+</div>
+<!-- #page-wrapper -->
+{/block}
+{block name="js"} <script src="__js__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>{/block}
+{block name="script"}
+<script type="text/javascript">
+$('#start').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true
+});
+</script>
+{/block}

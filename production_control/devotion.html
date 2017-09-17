@@ -1,0 +1,558 @@
+{extend name="base" /} {block name="css"}
+<link rel="stylesheet" type="text/css" href="__css__/productionControl.css">
+<link rel="stylesheet" type="text/css" href="__css__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css"> {/block} {block name="content"}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="row gray-bg">
+        <ol class="breadcrumb">
+            <li><a href="#" class="active"><i class="fa fa-home"></i>投入记录</a></li>
+        </ol>
+    </div>
+    <div class="row park-wrapper">
+
+        <div class="contain form-line">
+            <div class="flow-path row">
+                <div class="col-lg-4">
+                    <h4 class="path-title"><span class="path-bg">1</span>第一步:创建生产计划</h4>
+                    <img src="__img__/icon/arrRight.png">
+                </div>
+                <div class="col-lg-4">
+                    <h4 class="path-title active"><span class="path-bg">2</span>第二步:投入记录</h4>
+                    <img src="__img__/icon/arrRight.png">
+                </div>
+                <div class="col-lg-4">
+                    <h4 class="path-title"><span class="path-bg">3</span>第三步:水肥策略</h4>
+                </div>
+            </div>
+            <div class="flow-content row">
+                <div class="col-lg-8">
+                    <div class="inputs">
+                        <div class="row">
+                            <a class="btn btn-border" href="javascript:void(0)" onclick="openM()"><img src="__img__/icon/add.png">创建记录</a>
+                        </div>
+                        <div class="setHeight">
+                            <input type="hidden" value="{$batch}" id="batch">
+                            <input type="hidden" value="{$flow_id}" id="flow_id">
+                            <table class="table table-lineborder" >
+                                <thead>
+                                    <tr>
+                                        <th>投入时期</th>
+                                        <th>投入项目</th>
+                                        <th>项目描述</th>
+                                        <th>预计金额</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="inputs" id="main" style="height: 353px"></div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="bot-box Rnav-tab">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#a1" data-toggle="tab">历史决策</a>
+                            </li>
+                            <li>
+                                <a href="#a2" data-toggle="tab">参考知识库</a>
+                            </li>
+                            <li>
+                                <a href="#a3" data-toggle="tab">葡萄</a>
+                            </li>
+                            <li>
+                                <a href="#a4" data-toggle="tab">玫瑰香</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active" id="a1">
+                                <div class="row reset1">
+                                    <div class="col-sm-6">
+                                        <a class="btn btn-Rborder" href="">以往投入</a>
+                                        <a class="btn btn-Rborder" href="">葡萄</a>
+                                    </div>
+                                    <div class="col-sm-6 text-right">
+                                        <span>时间</span>
+                                        <input type="text" name="" id="startTime">
+                                        <span class="time-line"></span>
+                                        <input type="text" name="" id="endTime">
+                                        <a href="javascript:void(0)" class="btn btn-border" onclick="setPage(1,$('#startTime').val(),$('#endTime').val())"><i class="fa fa-search"></i>查询</a>
+                                    </div>
+                                </div>
+                                <table class="table table-lineborder">
+                                    <thead>
+                                        <tr>
+                                            <th>时间</th>
+                                            <th>批次号</th>
+                                            <th>金额</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="_tbody">
+                                    </tbody>
+                                </table>
+                                <ul class="pagination pull-right" id="ul">
+                                </ul>
+                            </div>
+                            <div class="tab-pane fade" id="a2">
+                            </div>
+                            <div class="tab-pane fade" id="a3">
+                            </div>
+                            <div class="tab-pane fade" id="a4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="bot-box">
+                        <img src="__img__/cycle/a2.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="step">
+            <button class="btn btn-border btn-lg"><a href="{:url('firstStep')}">上一步</a></button>
+            <button class="btn btn-primary btn-lg" onclick="nextStep()">下一步</button>
+        </footer>
+    </div>
+</div>
+
+<!-- 模态框（Modal）创建记录 -->
+<div class="modal fade" id="createRecord" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">创建记录</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform_" class="form-horizontal" role="form" name="form">
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">投入时期</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="a_period">
+                                <option value="">选择投入时期</option>
+                                {volist name='flow' id='vo'}
+                                <option value="{$vo.id}">{$vo.name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">投入项目</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="a_type" required name="title" type="text" placeholder="请输入投入项目" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">项目描述</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="a_project" required type="text" placeholder="请输入项目描述">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">预计金额</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="a_money" required type="text" placeholder="请输入预计金额" >
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button"  class="btn btn-primary" onclick="createT()">确认</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 模态框（Modal）修改记录 -->
+<div class="modal fade" id="updateRecord" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">修改记录</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" name="form">
+                    <input type="hidden" id="u_id">
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">投入时期</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="u_period">
+                                <option value="">选择投入时期</option>
+                                {volist name='flow' id='vo'}
+                                <option value="{$vo.id}">{$vo.name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">投入项目</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="u_type" required type="text" placeholder="请输入投入项目" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">项目描述</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="u_project" required type="text" placeholder="请输入投入项目">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">预计金额</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="u_money" required type="text" placeholder="请输入预计金额" >
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button"  class="btn btn-primary" onclick="updateOK()">确认修改</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- #page-wrapper -->
+{/block} {block name="js"}
+<script src="__js__/echarts.js"></script>
+<script src="__js__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="__js__/plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+{/block} {block name="script"}
+<script type="text/javascript">
+$('#startTime').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true
+});
+$('#endTime').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true
+});
+    //表单重置
+$(function () { $('#createRecord').on('hide.bs.modal', function () {
+        $("input[name='res']").click();
+    })
+});
+    //打开添加记录模态框
+    function openM(){
+        $('#createRecord').modal();
+    }
+//创建页面记录table
+var num = 0;
+    function createT(){
+        var period = $('#a_period').val();
+        var period_text = $("#a_period").find("option[value='"+period+"']").text();
+        var type = $('#a_type').val();
+        var project = $('#a_project').val();
+        var money = $('#a_money').val();
+        if(period == ''){
+            layer.msg('请选择投入时期', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(type == ''){
+            layer.msg('请填写投入项目', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(project == ''){
+            layer.msg('请填写项目描述', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(money == ''){
+            layer.msg('请填写预计金额', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }else if(isNaN(money)){
+            layer.msg('预计金额只能为数字', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }else if(money<=0){
+            layer.msg('预计金额只能为证正数', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        num++;
+        var tr = '<tr id="'+num+'" value="'+period+'">'+
+                    '<td>'+period_text+'</td>'+
+                    '<td>'+type+'</td>'+
+                    '<td>'+project+'</td>'+
+                    '<td>'+money+'</td>'+
+                    '<td class="operation">'+
+                        '<a href="javascript:void(0)" onclick="updateT(this)"><img src="__img__/icon/edit.png">修改</a>'+
+                        '<a href="javascript:void(0)" onclick="delT(this)"><img src="__img__/icon/delect.png">删除</a>'+
+                    '</td>'+
+                 '</tr>';
+        $('#createRecord').modal('hide');
+        $('#tbody').append(tr);
+        echart_b();
+    }
+    //修改记录
+    function updateT(obj){
+        var par = $(obj).parent().parent('tr');
+        $('#u_period').val(par.attr('value'));
+        $('#u_type').val(par.children('td').eq(1).text());
+        $('#u_project').val(par.children('td').eq(2).text());
+        $('#u_money').val(par.children('td').eq(3).text());
+        $('#u_id').val(par.attr('id'));
+        $('#updateRecord').modal();
+    }
+    function updateOK(){
+        var period = $('#u_period').val();
+        var period_text = $("#u_period").find("option[value='"+period+"']").text();
+        var type = $('#u_type').val();
+        var project = $('#u_project').val();
+        var money = $('#u_money').val();
+        var id = $('#'+$('#u_id').val()+'');
+        if(period == ''){
+            layer.msg('请选择投入时期', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(type == ''){
+            layer.msg('请填写投入项目', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(project == ''){
+            layer.msg('请填写项目描述', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(money == ''){
+            layer.msg('请填写预计金额', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }else if(isNaN(money)){
+            layer.msg('预计金额只能为数字', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }else if(money<=0){
+            layer.msg('预计金额只能为证正数', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        $('#updateRecord').modal('hide');
+        id.attr('value',period);
+        id.children('td').eq(0).text(period_text);
+        id.children('td').eq(1).text(type);
+        id.children('td').eq(2).text(project);
+        id.children('td').eq(3).text(money);
+        echart_b();
+    }
+    //删除记录
+    function delT(obj){
+        $(obj).parent().parent('tr').remove();
+        echart_b();
+    }
+    //echart饼图
+    function echart_b(){
+        var par = $('#tbody').children('tr');
+        var len = par.length;
+        var attr = [];
+        var name = [];
+        //将相同项目的资金进行合并相加
+        for(var m=0;m<len;m++){
+            var a = par.eq(m).children('td').eq(1).text();
+            var arr = [];
+            for(var j=0;j<m;j++){
+                arr.push(par.eq(j).children('td').eq(1).text());
+            }
+            if($.inArray(par.eq(m).children('td').eq(1).text(),arr)==-1){
+                var c = parseInt(par.eq(m).children('td').eq(3).text());
+                for(var i=m+1;i<len;i++){
+                    if(par.eq(i).children('td').eq(1).text() == a){
+                        c += parseInt(par.eq(i).children('td').eq(3).text());
+                    }
+                }
+                name.push(a);
+                attr.push({value:c,name:a});
+            }
+        }
+        /*for(var m=0;m<len;m++){
+            data_1.push(par.eq(m).children('td').eq(0).text()+':'+par.eq(m).children('td').eq(1).text()+':'+par.eq(m).children('td').eq(2).text());
+            data_2.push({value:par.eq(m).children('td').eq(3).text(),name:par.eq(m).children('td').eq(0).text()+':'+par.eq(m).children('td').eq(1).text()+':'+par.eq(m).children('td').eq(2).text()});
+        }*/
+        window.myChart = echarts.init(document.getElementById('main'));
+        myChart.setOption({
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data: name
+            },
+            series: [
+                {
+                    name: '项目资金配比',
+                    type: 'pie',
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '30',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data: attr
+                }
+            ]
+        });
+    }
+    $(function(){
+        echart_b();
+        setPage(1,'','');
+    });
+    //下一步
+    function nextStep(){
+        var par = $('#tbody').children('tr');
+        var len = par.length;
+        if(len==0){
+            layer.msg('请先创建投入记录', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        var bat = $('#batch').val();
+        var arr = [];
+        for(var m=0;m<len;m++){
+            arr[m] = [];
+            arr[m].push(bat);
+            arr[m].push(par.eq(m).attr('value'));
+            arr[m].push(par.eq(m).children('td').eq(0).text());
+            arr[m].push(par.eq(m).children('td').eq(1).text());
+            arr[m].push(par.eq(m).children('td').eq(2).text());
+            arr[m].push(par.eq(m).children('td').eq(3).text());
+        }
+        var money = 0;
+        $.each(arr,function(k,v){
+            money += parseInt(v[5]);
+        });
+        //将各项目预计投入总金额与计划经费进行对比
+        $.ajax({
+            url: "{:url('admin/ProductionControl/moneyContrast')}",
+            type: "post",
+            dataType: "json",
+            cache: false,
+            data: {money:money,bat:bat},
+            success: function (data) {
+                if(data.code == 0){
+                    layer.msg(data.msg, {
+                        icon: 7,
+                        time: 2000
+                    });
+                }else{
+                    dataPost(arr);
+                }
+            }
+        });
+    }
+    //创建form并提交
+    function dataPost (arr){
+        var json = JSON.stringify(arr);
+        var form = $("<form method='post'></form>");
+        form.attr({"action":"{:url('strategy')}"});
+        var input = $("<input type='hidden'>");
+        input.attr("name",'data');
+        input.val(json);
+        form.append(input);
+        var a = document.documentElement.outerHTML;
+        var input1 = $("<input type='hidden'>");
+        input1.attr("name",'html');
+        input1.val(htmlEncode(a));
+        form.append(input1);
+        var flow_id = $('#flow_id').val();
+        var input2 = $("<input type='hidden'>");
+        input2.attr("name",'flow_id');
+        input2.val(htmlEncode(flow_id));
+        form.append(input2);
+        $(document.body).append(form);
+        //表单提交
+        form.submit();
+    }
+    //转义html标签
+    function htmlEncode(value){
+        return $('<div/>').text(value).html();
+    }
+    //分页
+    function setPage(page,start,end){
+        $.ajax({
+            url: "{:url('admin/ProductionControl/historyMoney')}",
+            type: 'post',
+            //dataType: 'json',
+            data: {page: page,start_time: start,end_time: end},
+            success:function(data){
+                var html = $.parseJSON(data);
+                $('#_tbody').html(html[0]);
+                $('#ul').html(html[1]);
+            }
+        });
+    }
+</script>
+{/block}

@@ -1,0 +1,725 @@
+{extend name="base" /} {block name="css"}
+<link rel="stylesheet" type="text/css" href="__css__/productionControl.css">
+<link rel="stylesheet" type="text/css" href="__css__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css"> {/block} {block name="content"}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="row gray-bg">
+        <ol class="breadcrumb">
+            <li><a href="#" class="active"><i class="fa fa-home"></i>水肥策略</a></li>
+        </ol>
+    </div>
+    <div class="row park-wrapper">
+        <div class="contain form-line">
+            <div class="flow-path row">
+                <div class="col-lg-4">
+                    <h4 class="path-title"><span class="path-bg">1</span>第一步:创建生产计划</h4>
+                    <img src="__img__/icon/arrRight.png">
+                </div>
+                <div class="col-lg-4">
+                    <h4 class="path-title"><span class="path-bg">2</span>第二步:投入记录</h4>
+                    <img src="__img__/icon/arrRight.png">
+                </div>
+                <div class="col-lg-4">
+                    <h4 class="path-title active"><span class="path-bg">3</span>第三步:水肥策略</h4>
+                </div>
+            </div>
+            <div class="flow-content row strategy">
+                <div class="col-lg-6">
+                    <div class="inputs">
+                        <div class="row">
+                            <div class="col-sm-6 text-left">
+                                <h4>水肥策略</h4></div>
+                            <div class="col-sm-6">
+                                <a class="btn btn-border" href="javascript:void(0)" onclick="createS()"><img src="__img__/icon/add.png">创建记录</a>
+                            </div>
+                        </div>
+                        <div class="setHeight">
+                            <input type="hidden" value="{$batch}" id="batch">
+                            <table class="table table-lineborder">
+                                <thead>
+                                    <tr>
+                                        <th>实施时期</th>
+                                        <th>执行项目</th>
+                                        <th>单次用量</th>
+                                        <th>执行周期</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="s_tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="inputs">
+                        <div class="row">
+                            <div class="col-sm-6 text-left">
+                                <h4>施肥配方</h4></div>
+                            <div class="col-sm-6">
+                                <a class="btn btn-border" href="javascript:void(0)" onclick="createF()"><img src="__img__/icon/add.png">创建记录</a>
+                            </div>
+                        </div>
+                        <div class="setHeight">
+                            <table class="table table-lineborder">
+                                <thead>
+                                    <tr>
+                                        <th>配方号</th>
+                                        <th>执行时期</th>
+                                        <th>元素名称</th>
+                                        <th>水溶比例</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="f_tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="bot-box Rnav-tab">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#a1" data-toggle="tab">历史决策</a>
+                            </li>
+                            <li>
+                                <a href="#a2" data-toggle="tab">参考知识库</a>
+                            </li>
+                            <li>
+                                <a href="#a3" data-toggle="tab">葡萄</a>
+                            </li>
+                            <li>
+                                <a href="#a4" data-toggle="tab">玫瑰香</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active" id="a1">
+                                <div class="row reset1">
+                                    <div class="col-sm-12 text-left">
+                                        <span>时间</span>
+                                        <input type="text" name="" id="startTime">
+                                        <span class="time-line"></span>
+                                        <input type="text" name="" id="endTime">
+                                        <a href="javascript:void(0)" class="btn btn-border" onclick="setPage(1,$('#startTime').val(),$('#endTime').val())"><i class="fa fa-search"></i>查询</a>
+                                    </div>
+                                </div>
+                                <table class="table table-lineborder">
+                                    <thead>
+                                        <tr>
+                                            <th>时间</th>
+                                            <th>批次号</th>
+                                            <th>金额</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="_tbody">
+                                    </tbody>
+                                </table>
+                                <ul class="pagination pull-right" id="ul">
+                                </ul>
+                            </div>
+                            <div class="tab-pane fade" id="a2">
+                            </div>
+                            <div class="tab-pane fade" id="a3">
+                            </div>
+                            <div class="tab-pane fade" id="a4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="bot-box Rnav-tab">
+                        <h5 class="IDrecipe">{$batch}</h5>
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#b1" data-toggle="tab">策略表</a>
+                            </li>
+                            <li>
+                                <a href="#b2" data-toggle="tab">水肥统计</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active" id="b1">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                      <img src="__img__/cycle/a2.png" class="a2">
+                                    </div>
+                                </div>            
+                            </div>
+                            <div class="tab-pane fade" id="b2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="step">
+            <button class="btn btn-border btn-lg"><a href="{:url('secondStep')}">上一步</a></button>
+            <button class="btn btn-primary btn-lg"  onclick="completeAll()"><a href="javascript:void(0)">完成</a></button>
+        </footer>
+    </div>
+</div>
+
+<!-- 模态框（Modal）创建水肥策略记录 -->
+<div class="modal fade" id="createS" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">创建水肥策略</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform_" class="form-horizontal" role="form" name="form">
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">实施时期</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="a_s_period">
+                                <option value="">选择实施时期</option>
+                                {volist name='flow' id='vo'}
+                                <option value="{$vo.id}">{$vo.name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">执行项目</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="a_project" required name="title" type="text" placeholder="请输入执行项目" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">单次用量</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="a_dosage" required type="text" placeholder="请输入单次用量">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">执行周期</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="a_cycle" required type="text" placeholder="请输入执行周期，例如：5天/次" >
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button"  class="btn btn-primary" onclick="createSR()">确认</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 模态框（Modal）修改水肥策略记录 -->
+<div class="modal fade" id="updateS" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">修改水肥策略</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" name="form">
+                    <input type="hidden" id="u_s_id">
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">实施时期</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="u_s_period">
+                                <option value="">选择实施时期</option>
+                                {volist name='flow' id='vo'}
+                                <option value="{$vo.id}">{$vo.name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">执行项目</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="u_project" required type="text" placeholder="请输入执行项目" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">单次用量</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="u_dosage" required type="text" placeholder="请输入单次用量">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">执行周期</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="u_cycle" required type="text" placeholder="请输入执行周期，例如：5天/次" >
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button"  class="btn btn-primary" onclick="updateSS()">确认修改</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 模态框（Modal）创建施肥配方记录 -->
+<div class="modal fade" id="createF" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">创建施肥配方</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tform_" class="form-horizontal" role="form" name="form">
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">配方号</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="a_recipe" required name="title" type="text" placeholder="请输入配方号" >
+                        </div>
+                    </div>
+
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">执行时期</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="a_f_period">
+                                <option value="">选择执行时期</option>
+                                {volist name='flow' id='vo'}
+                                <option value="{$vo.id}">{$vo.name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">元素名称</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="a_element" required type="text" placeholder="请输入元素名称">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">水溶比例</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="a_scale" required type="text" placeholder="请输入比例" >
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button"  class="btn btn-primary" onclick="createFR()">确认</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 模态框（Modal）修改施肥配方记录 -->
+<div class="modal fade" id="updateF" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">修改施肥配方</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" name="form">
+                    <input type="hidden" id="u_f_id">
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">配方号</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="u_recipe" required type="text" placeholder="请输入配方号" >
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label for="inputPassword"  class="col-sm-2 control-label">执行时期</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="u_f_period">
+                                <option value="">选择执行时期</option>
+                                {volist name='flow' id='vo'}
+                                <option value="{$vo.id}">{$vo.name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">元素名称</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="u_element" required type="text" placeholder="请输入元素名称">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">所占比例</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="u_scale" required type="text" placeholder="请输入比例" >
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <input name="res" type="reset" style="display:none;" />
+                <button type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button"  class="btn btn-primary" onclick="updateFS()">确认修改</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- #page-wrapper -->
+{/block} {block name="js"}
+<script src="__js__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="__js__/plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+{/block} {block name="script"}
+<script type="text/javascript">
+$('#startTime').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true
+});
+$('#endTime').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true
+});
+//表单重置
+$(function () { $('#createS').on('hide.bs.modal', function () {
+    $("input[name='res']").click();
+})
+});
+$(function () { $('#createF').on('hide.bs.modal', function () {
+    $("input[name='res']").click();
+})
+});
+
+    //创建水肥策略
+    function createS(){
+        $('#createS').modal();
+    }
+var num = 0;
+    function createSR(){
+        var period = $('#a_s_period').val();
+        var period_text = $("#a_s_period").find("option[value='"+period+"']").text();
+        var project = $('#a_project').val();
+        var dosage = $('#a_dosage').val();
+        var cycle = $('#a_cycle').val();
+        if(period == ''){
+            layer.msg('请选择实施时期', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(project == ''){
+            layer.msg('请填写执行项目', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(dosage == ''){
+            layer.msg('请填写单次用量', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(cycle == ''){
+            layer.msg('请填写执行周期', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        num++;
+        var tr = '<tr id="'+num+'" value="'+period+'">'+
+                    '<td>'+period_text+'</td>'+
+                    '<td>'+project+'</td>'+
+                    '<td>'+dosage+'</td>'+
+                    '<td>'+cycle+'</td>'+
+                    '<td class="operation">'+
+                        '<a href="javascript:void(0)" onclick="updateS(this)"><img src="__img__/icon/edit.png">修改</a>'+
+                        '<a href="javascript:void(0)" onclick="delS(this)"><img src="__img__/icon/delect.png">删除</a>'+
+                    '</td>'+
+                  '</tr>';
+        $('#createS').modal('hide');
+        $('#s_tbody').append(tr);
+        //echart_b();
+    }
+    //修改水肥策略记录
+    function updateS(obj){
+        var par = $(obj).parent().parent('tr');
+        $('#u_s_period').val(par.attr('value'));
+        $('#u_project').val(par.children('td').eq(1).text());
+        $('#u_dosage').val(par.children('td').eq(2).text());
+        $('#u_cycle').val(par.children('td').eq(3).text());
+        $('#u_s_id').val(par.attr('id'));
+        $('#updateS').modal();
+    }
+    function updateSS(){
+        var period = $('#u_s_period').val();
+        var period_text = $("#u_s_period").find("option[value='"+period+"']").text();
+        var project = $('#u_project').val();
+        var dosage = $('#u_dosage').val();
+        var cycle = $('#u_cycle').val();
+        var id = $('#'+$('#u_s_id').val()+'');
+        if(period == ''){
+            layer.msg('请选择实施时期', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(project == ''){
+            layer.msg('请填写执行项目', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(dosage == ''){
+            layer.msg('请填写单次用量', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(cycle == ''){
+            layer.msg('请填写执行周期', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        $('#updateS').modal('hide');
+        id.attr('value',period);
+        id.children('td').eq(0).text(period_text);
+        id.children('td').eq(1).text(project);
+        id.children('td').eq(2).text(dosage);
+        id.children('td').eq(3).text(cycle);
+        //echart_b();
+    }
+    //删除水肥策略记录
+    function delS(obj){
+        $(obj).parent().parent('tr').remove();
+        //echart_b();
+    }
+
+    //创建施肥配方记录
+    function createF(){
+        $('#createF').modal();
+    }
+    var num1 = 0;
+    function createFR(){
+        var recipe = $('#a_recipe').val();
+        var period = $('#a_f_period').val();
+        var period_text = $("#a_f_period").find("option[value='"+period+"']").text();
+        var element = $('#a_element').val();
+        var scale = $('#a_scale').val();
+        if(recipe == ''){
+            layer.msg('请输入配方号', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(period == ''){
+            layer.msg('请选择执行时期', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(element == ''){
+            layer.msg('请填写元素名称', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(scale == ''){
+            layer.msg('请填写比例', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        num1++;
+        var tr = '<tr id="f'+num1+'" value="'+period+'">'+
+                    '<td>'+recipe+'</td>'+
+                    '<td>'+period_text+'</td>'+
+                    '<td>'+element+'</td>'+
+                    '<td>'+scale+'</td>'+
+                    '<td class="operation">'+
+                        '<a href="javascript:void(0)" onclick="updateF(this)"><img src="__img__/icon/edit.png">修改</a>'+
+                        '<a href="javascript:void(0)" onclick="delF(this)"><img src="__img__/icon/delect.png">删除</a>'+
+                    '</td>'+
+                 '</tr>';
+        $('#createF').modal('hide');
+        $('#f_tbody').append(tr);
+        //echart_b();
+    }
+    //修改施肥配方记录
+    function updateF(obj){
+        var par = $(obj).parent().parent('tr');
+        $('#u_f_period').val(par.attr('value'));
+        $('#u_recipe').val(par.children('td').eq(0).text());
+        $('#u_element').val(par.children('td').eq(2).text());
+        $('#u_scale').val(par.children('td').eq(3).text());
+        $('#u_f_id').val(par.attr('id'));
+        $('#updateF').modal();
+    }
+    function updateFS(){
+        var recipe = $('#u_recipe').val();
+        var period = $('#u_f_period').val();
+        var period_text = $("#u_f_period").find("option[value='"+period+"']").text();
+        var element = $('#u_element').val();
+        var scale = $('#u_scale').val();
+        var id = $('#'+$('#u_f_id').val()+'');
+        if(recipe == ''){
+            layer.msg('请输入配方号', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(period == ''){
+            layer.msg('请选择执行时期', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(element == ''){
+            layer.msg('请填写元素名称', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(scale == ''){
+            layer.msg('请填写比例', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        $('#updateF').modal('hide');
+        id.attr('value',period);
+        id.children('td').eq(0).text(recipe);
+        id.children('td').eq(1).text(period_text);
+        id.children('td').eq(2).text(element);
+        id.children('td').eq(3).text(scale);
+        //echart_b();
+    }
+    //删除施肥配方记录
+    function delF(obj){
+        $(obj).parent().parent('tr').remove();
+        //echart_b();
+    }
+    //完成
+    function completeAll(){
+        var par_s = $('#s_tbody').children('tr');
+        var len_s = par_s.length;
+        var par_f = $('#f_tbody').children('tr');
+        var len_f = par_f.length;
+        if(len_s==0){
+            layer.msg('请先创建水肥策略', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        if(len_f==0){
+            layer.msg('请先创建施肥配方', {
+                icon: 7,
+                time: 2000
+            });
+            return;
+        }
+        var bat = $('#batch').val();
+        var arr_s = [];
+        for(var m=0;m<len_s;m++){
+            arr_s[m] = [];
+            arr_s[m].push(bat);
+            arr_s[m].push(par_s.eq(m).attr('value'));
+            arr_s[m].push(par_s.eq(m).children('td').eq(0).text());
+            arr_s[m].push(par_s.eq(m).children('td').eq(1).text());
+            arr_s[m].push(par_s.eq(m).children('td').eq(2).text());
+            arr_s[m].push(par_s.eq(m).children('td').eq(3).text());
+        }
+        var arr_f = [];
+        for(var n=0;n<len_f;n++){
+            arr_f[n] = [];
+            arr_f[n].push(bat);
+            arr_f[n].push(par_f.eq(n).attr('value'));
+            arr_f[n].push(par_f.eq(n).children('td').eq(0).text());
+            arr_f[n].push(par_f.eq(n).children('td').eq(1).text());
+            arr_f[n].push(par_f.eq(n).children('td').eq(2).text());
+            arr_f[n].push(par_f.eq(n).children('td').eq(3).text());
+        }
+        postData(arr_s,arr_f);
+    }
+    //数据提交
+    function postData(arr_s,arr_f){
+        var json_s = JSON.stringify(arr_s);
+        var json_f = JSON.stringify(arr_f);
+
+        $.ajax({
+            url: "{:url('admin/ProductionControl/createOK')}",
+            type: 'post',
+            //dataType: 'json',
+            data: {s_record: json_s,f_record: json_f},
+            success:function(data){
+                console.log(data);
+                layer.msg(data, {
+                    icon: 1,
+                    time: 2000
+                },function(){
+                    location.href = "{:url('admin/ProductionControl/index')}";
+                })
+            }
+        });
+    }
+    //分页
+    function setPage(page,start,end){
+        $.ajax({
+            url: "{:url('admin/ProductionControl/historyMoney')}",
+            type: 'post',
+            //dataType: 'json',
+            data: {page: page,start_time: start,end_time: end},
+            success:function(data){
+                var html = $.parseJSON(data);
+                $('#_tbody').html(html[0]);
+                $('#ul').html(html[1]);
+            }
+        });
+    }
+    $(function(){
+        setPage(1,'','');
+    });
+</script>
+{/block}

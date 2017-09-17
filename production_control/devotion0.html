@@ -1,0 +1,231 @@
+{extend name="base" /} {block name="css"}
+<link rel="stylesheet" type="text/css" href="__css__/productionControl.css">
+<link rel="stylesheet" type="text/css" href="__css__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css"> {/block} {block name="content"}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="row gray-bg">
+        <ol class="breadcrumb">
+            <li><a href="#" class="active"><i class="fa fa-home"></i>投入记录</a></li>
+        </ol>
+    </div>
+    <div class="row park-wrapper">
+        <h4 class="park-title">投入记录</h4>
+        <div class="contain form-line">
+            <div class="flow-path row">
+                <div class="col-lg-4">
+                    <h4 class="path-title"><span class="path-bg">1</span>第一步:创建生产计划</h4>
+                    <img src="__img__/icon/arrRight.png">
+                </div>
+                <div class="col-lg-4">
+                    <h4 class="path-title active"><span class="path-bg">2</span>第二步:投入记录</h4>
+                    <img src="__img__/icon/arrRight.png">
+                </div>
+                <div class="col-lg-4">
+                    <h4 class="path-title"><span class="path-bg">3</span>第三步:水肥策略</h4>
+                </div>
+            </div>
+            <div class="flow-content row">
+                <div class="col-lg-8">
+                    <div class="inputs">
+                        <div class="row">
+                            <a class="btn btn-border" href=""><img src="__img__/icon/add.png">创建记录</a>
+                        </div>
+                        <div class="setHeight">
+                            <table class="table table-lineborder setHeight">
+                                <thead>
+                                    <tr>
+                                        <th>投入时期</th>
+                                        <th>投入类型</th>
+                                        <th>投入项目</th>
+                                        <th>预计金额</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>播种期</td>
+                                        <td>物种</td>
+                                        <td>物种</td>
+                                        <td>150</td>
+                                        <td class="operation">
+                                            <a href=""><img src="__img__/icon/edit.png">修改</a>
+                                            <a href=""><img src="__img__/icon/delect.png">删除</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>播种期</td>
+                                        <td>物种</td>
+                                        <td>物种</td>
+                                        <td>150</td>
+                                        <td class="operation">
+                                            <a href=""><img src="__img__/icon/edit.png">修改</a>
+                                            <a href=""><img src="__img__/icon/delect.png">删除</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>开花期</td>
+                                        <td>物种</td>
+                                        <td>物种</td>
+                                        <td>150</td>
+                                        <td class="operation">
+                                            <a href=""><img src="__img__/icon/edit.png">修改</a>
+                                            <a href=""><img src="__img__/icon/delect.png">删除</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>开花期</td>
+                                        <td>物种</td>
+                                        <td>物种</td>
+                                        <td>150</td>
+                                        <td class="operation">
+                                            <a href=""><img src="__img__/icon/edit.png">修改</a>
+                                            <a href=""><img src="__img__/icon/delect.png">删除</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>坐果期</td>
+                                        <td>物种</td>
+                                        <td>物种</td>
+                                        <td>150</td>
+                                        <td class="operation">
+                                            <a href=""><img src="__img__/icon/edit.png">修改</a>
+                                            <a href=""><img src="__img__/icon/delect.png">删除</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>播种期</td>
+                                        <td>物种</td>
+                                        <td>物种</td>
+                                        <td>150</td>
+                                        <td class="operation">
+                                            <a href=""><img src="__img__/icon/edit.png">修改</a>
+                                            <a href=""><img src="__img__/icon/delect.png">删除</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>播种期</td>
+                                        <td>物种</td>
+                                        <td>物种</td>
+                                        <td>150</td>
+                                        <td class="operation">
+                                            <a href=""><img src="__img__/icon/edit.png">修改</a>
+                                            <a href=""><img src="__img__/icon/delect.png">删除</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="inputs">
+                        <img src="__img__/cycle/a1.png" class="a1">
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="bot-box Rnav-tab">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#a1" data-toggle="tab">历史决策</a>
+                            </li>
+                            <li>
+                                <a href="#a2" data-toggle="tab">参考知识库</a>
+                            </li>
+                            <li>
+                                <a href="#a3" data-toggle="tab">葡萄</a>
+                            </li>
+                            <li>
+                                <a href="#a4" data-toggle="tab">玫瑰香</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active" id="a1">
+                                <div class="row reset1">
+                                    <div class="col-sm-6">
+                                        <a class="btn btn-Rborder" href="">以往投入</a>
+                                        <a class="btn btn-Rborder" href="">葡萄</a>
+                                    </div>
+                                    <div class="col-sm-6 text-right">
+                                        <span>时间</span>
+                                        <input type="text" name="" id="startTime">
+                                        <span class="time-line"></span>
+                                        <input type="text" name="" id="endTime">
+                                        <a href="" class="btn btn-border"><i class="fa fa-search"></i>查询</a>
+                                    </div>
+                                </div>
+                                <table class="table table-lineborder">
+                                    <thead>
+                                        <tr>
+                                            <th>时间</th>
+                                            <th>批次号</th>
+                                            <th>金额</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>2013-10-23-1013-12-23</td>
+                                            <td>BT20131023246</td>
+                                            <td>21345.9元</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2013-10-23-1013-12-23</td>
+                                            <td>BT20131023246</td>
+                                            <td>21345.9元</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <ul class="pagination pull-right">
+                                    <li><a href="">上一页</a></li>
+                                    <li class="active"><a href="">1</a></li>
+                                    <li><a href="">2</a></li>
+                                    <li><a href="">3</a></li>
+                                    <li><a href="">4</a></li>
+                                    <li><a href="">5</a></li>
+                                    <li><a href="">下一页</a></li>
+                                </ul>
+                            </div>
+                            <div class="tab-pane fade" id="a2">
+                            </div>
+                            <div class="tab-pane fade" id="a3">
+                            </div>
+                            <div class="tab-pane fade" id="a4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="bot-box">
+                        <img src="__img__/cycle/a2.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="step">
+            <button class="btn btn-border btn-lg"><a href="{:url('createProject')}">上一步</a></button>
+            <button class="btn btn-primary btn-lg"><a href="{:url('strategy')}">下一步</a></button>
+        </footer>
+    </div>
+</div>
+<!-- #page-wrapper -->
+{/block} {block name="js"}
+<script src="__js__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="__js__/plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+{/block} {block name="script"}
+<script type="text/javascript">
+$('#startTime').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true
+});
+$('#endTime').datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startView: 2,
+    minView: 2,
+    todayBtn: true
+});
+</script>
+{/block}

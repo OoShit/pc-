@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>邦伯物联网平台</title>
+    <link href="__css__/bootstrap.min.css" rel="stylesheet">
+    <link href="__css__/plugins/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <!-- Toastr style -->
+    <link href="__css__/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <!-- Gritter -->
+    <link href="__js__/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    <!-- Data Tables -->
+    <link href="__css__/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="__css__/plugins/dataTables/dataTables.responsive.css" rel="stylesheet">
+    <link href="__css__/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet">
+
+    <link href="__css__/animate.css" rel="stylesheet">
+    <link href="__css__/style.css" rel="stylesheet">
+    <link href="__css__/main.css"  rel="stylesheet" type="text/css" >
+    <link href="__css__/button.css" rel="stylesheet">
+     <style>
+        body{ overflow: auto !important;} .modal{ overflow: auto !important;}
+    </style>
+    {block name="css"}{/block}
+</head>
+
+<body>
+<div id="wrapper">
+    <header>
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#"><img alt="Brand" src="__img__/index/logo.png"></a>
+                    <a class="navbar-brand comName" href="#">智慧农业平台</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse navbar-responsive-collapse" id="navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right nav-userInfo">
+                        <li class="dropdown clearfixs">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="__img__/index/a3.jpg" class="user-header"><span class="line-bottom">{$Think.session.admin_name}<span class="caret"></span></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="javascript:void(0)" onclick="getUserInfo('{$Think.session.admin_id}')">用户信息</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a onclick="logout()">退出</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right nav-listInfo">
+                        {foreach name="menu" item='vo'}
+                            {if condition="isset($vo['children'])"}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{$vo.title} <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        {foreach name='vo.children' item='v'}
+                                        <li><a href="{:url($v.name)}">{$v.title}</a></li>
+                                        {/foreach}
+                                    </ul>
+                                </li>
+								<li class="img-separator"></li>
+                            {else/}
+                                <li><a href="{:url($vo.name)}">{$vo.title}</a></li>
+								<li class="img-separator"></li>
+                            {/if}
+                        {/foreach}
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </header>
+    <div class="content full-view">
+        {block name="content"}{/block}
+    </div>
+    {block name="footer"}{/block}
+    
+</div>
+<!-- 模态框（Modal）用户信息 -->
+<div class="modal fade" id="getUserInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog"  style="width: 450px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">用户信息</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" >
+                    <tbody id="userInfo">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button  type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+</body>
+<!-- Mainly scripts -->
+<script src="__js__/jquery-3.1.1.min.js"></script>
+<script src="__js__/bootstrap.min.js"></script>
+<script src="__js__/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="__js__/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="__js__/layer/layer.js"></script>
+<!-- Data Tables -->
+<script src="__js__/plugins/dataTables/jquery.dataTables.js"></script>
+<script src="__js__/plugins/dataTables/dataTables.bootstrap.js"></script>
+<script src="__js__/plugins/dataTables/dataTables.responsive.js"></script>
+<script src="__js__/plugins/dataTables/dataTables.tableTools.min.js"></script>
+<script src="__js__/plugins/pace/pace.min.js"></script>
+<!-- jQuery UI -->
+<script src="__js__/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- Toastr -->
+<script src="__js__/plugins/toastr/toastr.min.js"></script>
+
+<script src="__js__/admin.js"></script>
+{block name="js"}{/block}
+{block name="script"}{/block}
+<script type="text/javascript">
+
+
+
+    $(".navbar-nav li").click(function(){
+        // $('ul.navbar-nav').on("click",'li',function(){
+          $(this).addClass("active").siblings().removeClass("active");
+    });
+</script>
+<!--第一次登录系统提示 -->
+{php}
+     $juge = \think\Session::has('wenhainan');
+     if($juge){
+     {/php}
+     <!-- 提示登录成功脚本 -->
+            <script type="text/javascript">
+                        layer.msg('邦伯物联网平台欢迎您',{offset: 'rb'});
+            </script>
+    {php}
+        \think\Session::pull('wenhainan');
+     }
+{/php}
+
+
+<script type="text/javascript">
+    // 定义全局变量，websocket服务器，请勿删除。
+    var wsServer = 'ws://192.168.16.148:9503';
+    var websocket = new WebSocket(wsServer);
+    websocket.onmessage = function (evt) {
+        // console.log('Retrieved data from server: ' + evt.data);
+        toastr.options = {
+                            closeButton: true,
+                            progressBar: true,
+                            positionClass:"toast-bottom-right",
+                            showMethod: 'slideDown',
+                            timeOut: 2000
+                        };
+                        toastr.success(evt.data);
+    };
+ // 全局变量设置
+       var GV = {
+        current_controller: "admin/{$controller|default=''}/",
+        base_url: "__static__"
+        };
+    function logout(){
+           $.ajax({
+                       url: '{:url("admin/login/logout")}',
+                       type: 'GET',
+                       dataType: 'json',
+                       data: {param1: 1},
+                   })
+                   .done(function(data) {
+                      layer.msg(data.msg,{icon:1,time:1000},function(){
+                         window.location.href="admin/login/index";
+                      });
+                     
+                   })
+    }
+    $(function(){
+            //菜单选中状态监测
+            $('.navbar-nav li').find('a').removeClass('active');
+            var obj =$('.navbar-nav li').find('a[href*="' + GV.current_controller + '"]').parent();
+            $('.navbar-nav li').find('a[href*="' + GV.current_controller + '"]').parent().addClass('active');
+            if(obj.parents("li")){
+                obj.parents("li").addClass('active');
+            }
+        })
+
+      //获取用户信息
+    function getUserInfo(user_id){
+        $.ajax({
+            url: "{:url('admin/Login/getUserInfo')}",
+            type: 'post',
+            dataType: 'json',
+            data: {id: user_id},
+            success:function(data){
+                var tr = '<tr><th>用户名</th><td>'+data.username+'</td></tr>'+
+                         '<tr><th>管理员阶别</th><td>';
+                            if(user_id == 1){
+                                tr += '系统管理员';
+                            }else{
+                                tr += data.title;
+                            }
+                   tr += '</td></tr>'+
+                         '<tr><th>真实姓名</th><td>'+data.truename+'</td></tr>'+
+                         '<tr><th>手机号</th><td>'+data.tel+'</td></tr>'+
+                         '<tr><th>创建时间</th><td>'+data.create_time+'</td></tr>'+
+                         '<tr><th>最后登录时间</th><td>'+data.last_login_time+'</td></tr>'+
+                         '<tr><th>最后登录IP</th><td>'+data.last_login_ip+'</td></tr>';
+                $('#userInfo').html(tr);
+                $('#getUserInfo').modal();
+            }
+        });
+    }
+</script>
+</html>

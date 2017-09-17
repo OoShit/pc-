@@ -1,0 +1,1111 @@
+{extend name="base" /} {block name="css"}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+<meta http-equiv="Expires" content="0" />
+<script>
+    document.write("<link type='text/css' href='__js__/monitor/demo.css?version=" + new Date().getTime() + "' rel='stylesheet' />");
+</script>
+{/block}{block name="content"}
+<div id="page-wrapper" class="gray-bg dashbard-1">
+    <div class="row gray-bg">
+        <ol class="breadcrumb">
+            <li><a href="#" class="active"><i class="fa fa-home"></i>实时监控</a></li>
+        </ol>
+    </div>
+    <div class="row park-wrapper">
+
+        <div class="contain">
+            <div class="select-wrapper">
+                <form role="form" class="form-inline">
+                    <input type="hidden" id="val">
+                    <button class="btn btn-primary" disabled>条件筛选</button>
+                    <select class="form-control" onchange="getlower(1)" id="park">
+                        {volist name='park' id='vo'}
+                        <option value="{$vo.id}" {eq name="$vo.id" value="$park_id"} selected {/eq} >{$vo.name}</option>
+                        {/volist}
+                    </select>
+                    <select class="form-control" id="c_company" onchange="getlowland(1)">
+                        <option value="">请选择公司</option>
+                        {volist name='$data[0]' id='vo'}
+                    <option value="{$vo.id}">{$vo.name}</option>
+                    {/volist}
+                    </select>
+                    <select class="form-control" id="c_land" onchange="getlandinfo()">
+                        <option value="0">请选择地块</option>
+                    </select>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row park-wrapper show">
+        {volist name='$data[0]' id='vo'}
+        {php}
+            $a=0;
+            $b=0;
+            $c=0;
+            $d=0;
+        {/php}
+        <div class="col-md-6">
+            <div class="ibox border-all">
+                <div class="ibox-title">
+                    <h5>{$vo.name}</h5>
+                    <div class="state-list clearfix">
+                        <div class="device-state"><img src="__img__/icon/damage.png" class="state-icon">设备损坏</div>
+                        <div class="device-state"><img src="__img__/icon/warning.png" class="state-icon">设备报警</div>
+                        <div class="device-state"><img src="__img__/icon/disconnect.png" class="state-icon">连接断开</div>
+                        <div class="device-state"><img src="__img__/icon/normal.png" class="state-icon">设备正常</div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <ul id="block-tab" class="nav nav-tabs">
+                        {volist name='$data[1]' id='v'}
+                        {if condition='$v.company_id!=0'}
+                            {if condition='$v.company_id==$vo.id'}
+                                {php}
+                                $a++;
+                                {/php}
+                                {if condition='$a==1'}
+                                    <li class="active">
+                                {else/}
+                                    <li class="">
+                                {/if}
+                                        <a href="#b{$v.id}" data-toggle="tab" id="{$v.id}">{$v.name}</a>
+                                    </li>
+                            {/if}
+                        {else/}
+                            {if condition='!is_numeric($vo.id)'}
+                                {php}
+                                $b++;
+                                {/php}
+                                {if condition='$b==1'}
+                                <li class="active">
+                                {else/}
+                                <li class="">
+                                {/if}
+                                    <a href="#b{$v.id}" data-toggle="tab" id="{$v.id}">{$v.name}</a>
+                                </li>
+                            {/if}
+                        {/if}
+                        {/volist}
+                        <li class="tab-more">
+                            <a href="javascript:void();" rel="nofollow" class="btn-more">更多<i></i></a>
+                        </li>
+                    </ul>
+                    <div class="blockName-list clearfix">
+                        <a>地块信息一</a>
+                        <a class="all-block">全部地块<i class="fa fa-angle-right"></i></a>
+                    </div>
+                    <div id="block-tabContent" class="tab-content">
+
+                        {volist name='$data[1]' id='v'}
+                        {if condition='$v.company_id!=0'}
+                            {if condition='$v.company_id==$vo.id'}
+                            {php}
+                                $c++;
+                            {/php}
+                                {if condition='$c==1'}
+                        <div id="b{$v.id}" class="tab-pane fade in active">
+                                {else/}
+                            <div id="b{$v.id}" class="tab-pane fade">
+                                {/if}
+
+                            <table id="park-info" class="table table-hover">
+                                <thead class="gray-bg reset-vertical">
+                                    <tr>
+                                       <td><img src="__img__/icon/sum.png" class="monitor-icon">总数量:88</td>
+                                       <td><img src="__img__/icon/firingNum.png" class="monitor-icon">启动数量:66</td>
+                                       <td><img src="__img__/icon/Boltmonitoring.png" class="monitor-icon">枪机监控:44</td>
+                                       <td><img src="__img__/icon/Ballmonitoring.png" class="monitor-icon">球机监控:22</td>
+                                       <td class="text-right" colspan="3">
+                                          <a href="{:url('admin/RealtimeData/monitors',['land_id'=>$v.id])}" target="_blank"><button type="button" class="btn btn-danger btn-sm margin-btn1">
+                                            <img src="__img__/icon/control.png" class="icon-control" />监控
+                                          </button></a>
+                                        </td>
+                                    </tr>
+                                    
+                                </thead>
+                                <tbody class="reset-vertical">
+
+                                {volist name='$data[2]' id='val'}
+                                    {if condition='$val.land_id == $v.id'}
+                                    <tr>
+                                        <td><img src="{$val.image}" class="senser-img">{$val.name_ch}</td>
+                                        <td><span class="td-title">设备：</span>{$val.name}</td>
+                                        <td><span class="td-title">编号：</span>{$val.code}</td>
+                                        <td><span class="td-title">状态：</span>
+                                            {if condition='$val.equipstate == 1'}
+                                                <img src="__img__/icon/normal.png" class="state-icon icon-big">
+                                            {elseif condition='$val.equipstate == 2'/}
+                                                <img src="__img__/icon/disconnect.png" class="state-icon icon-big">
+                                            {elseif condition='$val.equipstate == 3'/}
+                                                <img src="__img__/icon/warning.png" class="state-icon icon-big">
+                                            {elseif condition='$val.equipstate == 4'/}
+                                                <img src="__img__/icon/damage.png" class="state-icon icon-big">
+                                            {/if}
+                                        </td>
+                                        <td><span class="td-title">数值：</span>{$val.equipdata}</td>
+                                        <td><span class="td-title">单位：</span>{$val.value_unit}</td>
+                                        <td class="text-right">
+                                            <button type="button" class="btn btn-primary btn-sm" onclick="showData('{$val.id}')">
+                                                <i class="fa fa-search" aria-hidden="true"></i>查看
+                                            </button>
+                                            <button type="button" class="btn btn-gray btn-sm" onclick="showVideo('{$val.id}')">
+                                                <img src="__img__/icon/control.png" class="icon-control" />监控
+                                            </button>
+
+                                        </td>
+                                    </tr>
+                                    {/if}
+                                {/volist}
+
+                                </tbody>
+                            </table>
+                        </div>
+                            {/if}
+                        {else/}
+                            {if condition='!is_numeric($vo.id)'}
+                                {php}
+                                 $d++;
+                                {/php}
+                                {if condition='$d==1'}
+                            <div id="b{$v.id}" class="tab-pane fade in active">
+                                {else/}
+                                <div id="b{$v.id}" class="tab-pane fade">
+                                {/if}
+
+                                    <table id="park-info" class="table table-hover">
+                                        <thead class="gray-bg reset-vertical">
+                                        <tr>
+                                            <td><img src="__img__/icon/sum.png" class="monitor-icon">总数量:88</td>
+                                            <td><img src="__img__/icon/firingNum.png" class="monitor-icon">启动数量:66</td>
+                                            <td><img src="__img__/icon/Boltmonitoring.png" class="monitor-icon">枪机监控:44</td>
+                                            <td><img src="__img__/icon/Ballmonitoring.png" class="monitor-icon">球机监控:22</td>
+                                            <td class="text-right" colspan="3">
+                                                <a href="{:url('admin/RealtimeData/monitors',['land_id'=>$v.id])}" target="_blank"><button type="button" class="btn btn-danger btn-sm margin-btn1">
+                                                    <img src="__img__/icon/control.png" class="icon-control" />监控
+                                                </button></a>
+                                            </td>
+                                        </tr>
+
+                                        </thead>
+                                        <tbody class="reset-vertical">
+
+                                        {volist name='$data[2]' id='val'}
+                                        {if condition='$val.land_id == $v.id'}
+                                        <tr>
+                                            <td><img src="{$val.image}" class="senser-img">{$val.name_ch}</td>
+                                            <td><span class="td-title">设备：</span>{$val.name}</td>
+                                            <td><span class="td-title">编号：</span>{$val.code}</td>
+                                            <td><span class="td-title">状态：</span>
+                                                {if condition='$val.equipstate == 1'}
+                                                <img src="__img__/icon/normal.png" class="state-icon icon-big">
+                                                {elseif condition='$val.equipstate == 2'/}
+                                                <img src="__img__/icon/disconnect.png" class="state-icon icon-big">
+                                                {elseif condition='$val.equipstate == 3'/}
+                                                <img src="__img__/icon/warning.png" class="state-icon icon-big">
+                                                {elseif condition='$val.equipstate == 4'/}
+                                                <img src="__img__/icon/damage.png" class="state-icon icon-big">
+                                                {/if}
+                                            </td>
+                                            <td><span class="td-title">数值：</span>{$val.equipdata}</td>
+                                            <td><span class="td-title">单位：</span>{$val.value_unit}</td>
+                                            <td class="text-right">
+                                                <button type="button" class="btn btn-primary btn-sm" onclick="showData('{$val.id}')">
+                                                    <i class="fa fa-search" aria-hidden="true"></i>查看
+                                                </button>
+                                                <button type="button" class="btn btn-gray btn-sm" onclick="showVideo('{$val.id}')">
+                                                    <img src="__img__/icon/control.png" class="icon-control" />监控
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {/if}
+                                        {/volist}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {/if}
+                        {/if}
+                        {/volist}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {/volist}
+    </div>
+
+    <!-- 模态框（Modal） 数据图表展示-->
+    <div class="modal fade" id="showData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 1200px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <input type="hidden" id="equip_id">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">传感器数据图</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div id="main" style="width: 1160px;height:460px;"></div>
+
+                </div>
+                <div class="modal-footer">
+                    <button  type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div><!-- #page-wrapper -->
+<!--视频-->
+
+<div class="video-box"  style="display: none">
+    <div class="video" id="divPlugin"></div>
+    <div class="video-tools">
+        <img src="__img__/icon/setting.png" class="video-setting">
+        <img src="__img__/icon/close.png" class="video-close" onclick="VideoClose()">
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script src="__js__/monitor/webVideoCtrl.js"></script>
+<script src="__js__/monitor/demo.js"></script>
+<script src="__js__/echarts.js"></script>
+<script src="__js__/authcode.js"></script>
+<script>
+    // 数据图表
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // 指定图表的配置项和数据
+    option = {
+        title: {
+            text: '传感器数据',
+            left: 'center'
+        },
+        //数据提示框配置
+        tooltip: {
+            trigger: 'axis',
+            formatter: '{a} <br/>{b} <br/> 值 {c}'
+        },
+        //工具箱配置
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true}, // 辅助线标志，上图icon左数1/2/3，分别是启用，删除上一条，删除全部
+                myTool2: {
+                    show: true,
+                    title: '刷新数据',
+                    icon: 'image://__img__/timg1.jpg',
+                    onclick: function (){
+                        shua()
+                    }
+                },
+                dataView : {show: true, readOnly: true},// 数据视图，上图icon左数8，打开数据视图
+                magicType : {show: true, type: ['line', 'bar']},// 图表类型切换，当前仅支持直角系下的折线图、柱状图转换，上图icon左数6/7，分别是切换折线图，切换柱形图
+                restore : {show: false}, // 还原，复位原始图表，上图icon左数9，还原
+                saveAsImage : {show: true} // 保存为图片，上图icon左数10，保存
+            }
+        },
+        //数据区域缩放
+        dataZoom: {
+            show: true,
+            start : 70
+        },
+        color:[
+            '#1AB394'
+        ],
+        legend: {
+            left: 'left',
+            data: ['指数']
+        },
+        xAxis: {
+            type: 'category',
+            name: '时间',
+            splitLine: {show: true},
+            splitNumber:6
+            //data: ['一', '二', '三', '四', '五', '六', '七', '八', '九','十']
+        },
+        grid: {
+            left: '3%',
+            right: '9%',
+            bottom: '3%',
+            containLabel: true
+        },
+        yAxis: {
+            type: 'value',
+            name: '数值'
+
+        },
+        series: [
+            {
+                name: '指数',
+                type: 'line'
+                //data: [1, 3, 9, 27, 81, 24, 51, 33, 58,198]
+            }
+        ]
+    };
+
+    // 异步加载数据
+    //时间格式化
+    function ge(m){return m<10?'0'+m:m }
+    function showData(equip_id){
+        $('#equip_id').val(equip_id);
+        var x_data = [];
+        var y_data = [];
+        $.ajax({
+            url: "{:url('admin/RealtimeData/showData')}",
+            type: 'post',
+            dataType: 'json',
+            data: {equip_id: equip_id},
+            success:function(data){
+                $.each(data[0],function(k,v){
+                    var date = new Date(v.recordtime);
+                    var shijian = ge(date.getHours())+':'+ge(date.getMinutes());
+                    x_data.push(shijian);
+                    y_data.push(v.equipdata);
+                });
+                // 填入数据
+                myChart.setOption({
+                    xAxis: {
+                        data: x_data //['2017-02-28 09:50:01','2017-02-28 09:50:01','2017-02-28 09:50:01','2017-02-28 09:50:01']
+                    },
+                    yAxis: {
+                        name: data[2]['value_unit']
+
+                    },
+                    legend: {
+                        left: 'left',
+                        data: [data[2]['name_ch']],
+                    },
+                    series: [{
+                        // 根据名字对应到相应的系列
+                        name: data[2]['name_ch'],
+                        type: 'line',
+                        data: y_data //['20','32','33','43']
+                    }],
+                    title: {
+                        text: data[1]['name']
+                    },
+                });
+                $('#showData').modal('show');
+            }
+
+        });
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+    }
+    function shua(){
+        var equip_id = $('#equip_id').val();
+        var x_data = [];
+        var y_data = [];
+        $.ajax({
+            url: "{:url('admin/RealtimeData/showData')}",
+            type: 'post',
+            dataType: 'json',
+            data: {equip_id: equip_id},
+            success:function(data){
+                $.each(data[0],function(k,v){
+                    var date = new Date(v.recordtime);
+                    var shijian = ge(date.getHours())+':'+ge(date.getMinutes());
+                    x_data.push(shijian);
+                    y_data.push(v.equipdata);
+                });
+                // 填入数据
+                myChart.setOption({
+                    xAxis: {
+                        data: x_data //['2017-02-28 09:50:01','2017-02-28 09:50:01','2017-02-28 09:50:01','2017-02-28 09:50:01']
+                    },
+                    yAxis: {
+                        name: data[2]['value_unit']
+
+                    },
+                    legend: {
+                        left: 'left',
+                        data: [data[2]['name_ch']],
+                    },
+                    series: [{
+                        // 根据名字对应到相应的系列
+                        name: data[2]['name_ch'],
+                        type: 'line',
+                        data: y_data //['20','32','33','43']
+                    }],
+                    title: {
+                        text: data[1]['name']
+                    }
+                });
+            }
+
+        });
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+
+</script>
+<script type="text/javascript">
+
+//下拉框联动
+var IsCompanyChange =false;
+    //获取下属公司
+    function getlower(action){
+
+        clearTimeout(time1);
+        if ("undefined" != typeof time2 && time2 != ''){
+            clearTimeout(time2);
+        }
+        if ("undefined" != typeof time3 && time3 != '') {
+            clearTimeout(time3);
+        }
+
+        var park_id = $('#park').val();
+        if(action==2){
+            var a = $('#block-tab .active');
+            var length = a.length;
+            var i;
+            var x='';
+            for(i=0;i<length;i++){
+                x += a.eq(i).children('a').attr('href')+',';
+            }
+            var len = x.length;
+            x = x.substr(0,len-1);
+            $('#val').val(x);
+        }
+        //$('.show div').remove();
+        $.ajax({
+            url: "{:url('admin/RealtimeData/getInfo')}",
+            type: 'post',
+            dataType: 'json',
+            data: {park_id: park_id},
+            success:function(data){
+                $('.show div').remove();
+                console.log(data);
+                var option = '';
+
+                $.each(data[0],function(k1,v1){
+                    option += "<option value='"+v1.id+"'>"+v1.name+"</option>";
+                });
+                $('#c_company option:gt(0)').remove();
+                $('#c_land option:gt(0)').remove();
+                if(option==''){option="<option>无下属公司或地块</option>";}
+                $('#c_company').append(option);
+                //园区、公司、地块、传感器信息
+                $.each(data[0],function(k,v){
+                    var title = '';
+                    var land_content1 = '';
+                    var land_content2 = '';
+                    var land_content3 = '';
+                    var land_content4 = '';
+                    var a = '';
+                    var b = '';
+                    var c = '';
+                    var d = 0;
+                    var e = '';
+                    var f = '';
+                    var g = '';
+                    var h = '';
+                    var i = '';
+                    var j = '';
+                    var l = '';
+                    var m = 0;
+                    var n = 0;
+                    var o = 0;
+                    title = '<div class="col-md-6">'+
+                            '<div class="ibox border-all">'+
+                            '<div class="ibox-title">'+
+                            '<h5>'+v.name+'</h5>'+
+                            '<div class="state-list clearfix">'+
+                            '<div class="device-state"><img src="__img__/icon/damage.png" class="state-icon">设备损坏</div>'+
+                            '<div class="device-state"><img src="__img__/icon/warning.png" class="state-icon">设备报警</div>'+
+                            '<div class="device-state"><img src="__img__/icon/disconnect.png" class="state-icon">连接断开</div>'+
+                            '<div class="device-state"><img src="__img__/icon/normal.png" class="state-icon">设备正常</div>'+
+                            '</div>'+
+                            '</div>';
+                    land_content1 = '<div class="ibox-content">'+
+                                        '<ul id="block-tab" class="nav nav-tabs">';
+
+
+                    $.each(data[1],function(ko,vo) {
+                        if(vo.company_id!=0){
+                            if(vo.company_id == v.id){
+                                ++d;
+                                if(d==1){
+                                    a = '<li class="active">';
+                                }else{
+                                    a = '<li class="">';
+                                }
+                                b = '<a href="#b'+vo.id+'" data-toggle="tab" id="'+vo.id+'">'+vo.name+'</a>';
+                                c = '</li>';
+                                land_content2 += a+b+c;
+                            }
+                        }else{
+                            if(isNaN(v.id)){
+                                ++o;
+                                if(o==1){
+                                    a = '<li class="active">';
+                                }else{
+                                    a = '<li class="">';
+                                }
+                                b = '<a href="#b'+vo.id+'" data-toggle="tab" id="'+vo.id+'">'+vo.name+'</a>';
+                                c = '</li>';
+                                land_content2 += a+b+c;
+                            }
+                        }
+                    });
+                    land_content3 =  '<li class="tab-more">'+
+                                       '<a href="javascript:void();" rel="nofollow" class="btn-more">更多<i></i></a>'+
+                                     '</li>'+
+                                     '</ul>'+
+                                     '<div class="blockName-list clearfix">'+
+                                         '<a>地块信息一</a>'+
+                                         '<a class="all-block">全部地块<i class="fa fa-angle-right"></i></a>'+
+                                     '</div>'+
+                                    '<div id="block-tabContent" class="tab-content">';
+                    $.each(data[1],function(ko,vo) {
+                        l = '';
+                        if(vo.company_id!=0) {
+                            if(vo.company_id == v.id) {
+                                ++m;
+                                if (m==1) {
+                                    e = '<div id="b' + vo.id + '" class="tab-pane fade in active">'
+                                } else {
+                                    e = '<div id="b' + vo.id + '" class="tab-pane fade">'
+                                }
+                                f = '<table id="park-info" class="table table-hover">'+
+                                        '<thead class="gray-bg reset-vertical">'+
+                                        '<tr>' +
+                                        '<td><img src="__img__/icon/sum.png" class="monitor-icon">总数量:88</td>'+
+                                        '<td><img src="__img__/icon/firingNum.png" class="monitor-icon">启动数量:66</td>'+
+                                        '<td><img src="__img__/icon/Boltmonitoring.png" class="monitor-icon">枪机监控:44</td>'+
+                                        '<td><img src="__img__/icon/Ballmonitoring.png" class="monitor-icon">球机监控:22</td>'+
+                                        '<td class="text-right" colspan="3">'+
+                                        '<a href="{:url(\'admin/RealtimeData/monitors\')}?land_id='+vo.id+'" target="_blank"><button type="button" class="btn btn-danger btn-sm margin-btn1">'+
+                                        '<img src="__img__/icon/control.png" class="icon-control" />监控'+
+                                        '</button></a>'+
+                                        '</td>'+
+                                        '</tr>'+
+
+                                        '</thead>' +
+                                        '<tbody class="reset-vertical">';
+                                $.each(data[2], function (key, val) {
+                                    if (val.land_id == vo.id) {
+                                        g = '<tr>' +
+                                                '<td><img src="' + val.image + '" class="senser-img">' + val.name_ch + '</td>' +
+                                                '<td><span class="td-title">设备：</span>' + val.name + '</td>' +
+                                                '<td><span class="td-title">编号：</span>' + val.code + '</td>' +
+                                                '<td><span class="td-title">状态：</span>';
+                                        if (val.equipstate == 1) {
+                                            h = '<img src="__img__/icon/normal.png" class="state-icon icon-big"></td>';
+                                        } else if (val.equipstate == 2) {
+                                            h = '<img src="__img__/icon/disconnect.png" class="state-icon icon-big"></td>';
+                                        } else if (val.equipstate == 3) {
+                                            h = '<img src="__img__/icon/warning.png" class="state-icon icon-big"></td>';
+                                        } else if (val.equipstate == 4) {
+                                            h = '<img src="__img__/icon/damage.png" class="state-icon icon-big"></td>';
+                                        }
+                                        i = '<td><span class="td-title">数值：</span>' + val.equipdata + '</td>' +
+                                                '<td><span class="td-title">单位：</span>' + val.value_unit + '</td>' +
+                                                '<td class="text-right">' +
+                                                '<button type="button" class="btn btn-primary btn-sm" onclick="showData(' + val.id + ')">' +
+                                                '<i class="fa fa-search" aria-hidden="true"></i>查看' +
+                                                '</button> ' +
+                                                '<button type="button" class="btn btn-gray btn-sm" onclick="showVideo('+val.id+')">' +
+                                                '<img src="__img__/icon/control.png" class="icon-control" />监控' +
+                                                '</button>' +
+                                                '</td>' +
+                                                '</tr>';
+                                        l += g + h + i;
+                                    }
+                                });
+                                j = '</tbody>' +
+                                        '</table>' +
+                                        '</div>';
+                                land_content4 += e + f + l + j;
+                            }
+                        }else{
+                            if(isNaN(v.id)) {
+                                ++n;
+                                if (n == 1) {
+                                    e = '<div id="b' + vo.id + '" class="tab-pane fade in active">'
+                                } else {
+                                    e = '<div id="b' + vo.id + '" class="tab-pane fade">'
+                                }
+                                f = '<table id="park-info" class="table table-hover">' +
+                                        '<thead class="gray-bg reset-vertical">' +
+                                        '<tr>' +
+                                        '<td><img src="__img__/icon/sum.png" class="monitor-icon">总数量:88</td>' +
+                                        '<td><img src="__img__/icon/firingNum.png" class="monitor-icon">启动数量:66</td>' +
+                                        '<td><img src="__img__/icon/Boltmonitoring.png" class="monitor-icon">枪机监控:44</td>' +
+                                        '<td><img src="__img__/icon/Ballmonitoring.png" class="monitor-icon">球机监控:22</td>' +
+                                        '<td class="text-right" colspan="3">' +
+                                        '<a href="{:url(\'admin/RealtimeData/monitors\')}?land_id='+vo.id+'" target="_blank"><button type="button" class="btn btn-danger btn-sm margin-btn1">' +
+                                        '<img src="__img__/icon/control.png" class="icon-control" />监控' +
+                                        '</button></a>' +
+                                        '</td>' +
+                                        '</tr>' +
+
+                                        '</thead>' +
+                                        '<tbody class="reset-vertical">';
+                                $.each(data[2], function (key, val) {
+                                    if (val.land_id == vo.id) {
+                                        g = '<tr>' +
+                                                '<td><img src="' + val.image + '" class="senser-img">' + val.name_ch + '</td>' +
+                                                '<td><span class="td-title">设备：</span>' + val.name + '</td>' +
+                                                '<td><span class="td-title">编号：</span>' + val.code + '</td>' +
+                                                '<td><span class="td-title">状态：</span>';
+                                        if (val.equipstate == 1) {
+                                            h = '<img src="__img__/icon/normal.png" class="state-icon icon-big"></td>';
+                                        } else if (val.equipstate == 2) {
+                                            h = '<img src="__img__/icon/disconnect.png" class="state-icon icon-big"></td>';
+                                        } else if (val.equipstate == 3) {
+                                            h = '<img src="__img__/icon/warning.png" class="state-icon icon-big"></td>';
+                                        } else if (val.equipstate == 4) {
+                                            h = '<img src="__img__/icon/damage.png" class="state-icon icon-big"></td>';
+                                        }
+                                        i = '<td><span class="td-title">数值：</span>' + val.equipdata + '</td>' +
+                                                '<td><span class="td-title">单位：</span>' + val.value_unit + '</td>' +
+                                                '<td class="text-right">' +
+                                                '<button type="button" class="btn btn-primary btn-sm" onclick="showData(' + val.id + ')">' +
+                                                '<i class="fa fa-search" aria-hidden="true"></i>查看' +
+                                                '</button> ' +
+                                                '<button type="button" class="btn btn-gray btn-sm" onclick="showVideo('+val.id+')">' +
+                                                '<img src="__img__/icon/control.png" class="icon-control" />监控' +
+                                                '</button>' +
+
+                                                '</td>' +
+                                                '</tr>';
+                                        l += g + h + i;
+                                    }
+                                });
+                                j = '</tbody>' +
+                                        '</table>' +
+                                        '</div>';
+                                land_content4 += e + f + l + j;
+                            }
+                        }
+                    });
+
+                var html = title+land_content1+land_content2+land_content3+land_content4+'</div></div></div></div>';
+                    //$('.show div').remove();
+                    $('.show').append(html);
+
+                    if(action==2){
+                        var y = $('#val').val();
+                        var z = y.split(',');
+                        var p;
+                        $("div[class^='tab-pane']").attr('class','tab-pane fade');
+                        $.each(z,function(k,v){
+                            $('#'+ v.substr(2) +'').parent('li').parent('ul').children('li').attr('class','');
+                            $('#'+ v.substr(2) +'').parent('li').attr('class','active');
+                            $('.btn-more').parent('li').attr('class','tab-more');
+                            $('#'+ v.substr(1) +'').attr('class','tab-pane fade in active');
+                        })
+                    }
+
+                });
+                window.time2 = setTimeout('getlower(2)',300000);
+            }
+        });
+        IsCompanyChange =true;
+    }
+var IsLandChange = false;
+    //获取下属地块
+    function getlowland(action){
+
+        var company_id = $('#c_company').val();
+            if (company_id != '') {
+                if (action == 2) {
+                    var a = $('#block-tab .active');
+                    var x = a.children('a').attr('href');
+                    $('#val').val(x);
+                    console.log(a);
+                }
+                //$('.show div').remove();
+                if ("undefined" != typeof time1 && time1 != '') {
+                    clearTimeout(time1);
+                }
+                if ("undefined" != typeof time2 && time2 != '') {
+                    clearTimeout(time2);
+                }
+                if ("undefined" != typeof time3 && time3 != '') {
+                    clearTimeout(time3);
+                }
+                if ("undefined" != typeof time4 && time4 != ''){
+                    clearTimeout(time4);
+                }
+
+                $.ajax({
+                        url: "{:url('admin/RealtimeData/getInfo')}",
+                        type: 'post',
+                        dataType: 'json',
+                        data: {company_id: company_id},
+                        success: function (data) {
+                            var option = '';
+                            $.each(data[1], function (k, v) {
+                                option += "<option value='" + v.id + "'>" + v.name + "</option>";
+                            });
+                            $('#c_land option:gt(0)').remove();
+                            if (option == '') {
+                                option = "<option>无下属地块</option>";
+                            }
+                            $('#c_land').append(option);
+                            //获取公司下地块、传感器信息
+                            var title = '';
+                            var land_content1 = '';
+                            var land_content2 = '';
+                            var land_content3 = '';
+                            var land_content4 = '';
+                            var a = '';
+                            var b = '';
+                            var c = '';
+                            var d = 0;
+                            var e = '';
+                            var f = '';
+                            var g = '';
+                            var h = '';
+                            var i = '';
+                            var j = '';
+                            var l = '';
+                            var m = 0;
+                            title = '<div class="col-md-6">' +
+                                    '<div class="ibox border-all">' +
+                                    '<div class="ibox-title">' +
+                                    '<h5>' + data[0]['name'] + '</h5>' +
+                                    '<div class="state-list clearfix">' +
+                                    '<div class="device-state"><img src="__img__/icon/damage.png" class="state-icon">设备损坏</div>' +
+                                    '<div class="device-state"><img src="__img__/icon/warning.png" class="state-icon">设备报警</div>' +
+                                    '<div class="device-state"><img src="__img__/icon/disconnect.png" class="state-icon">连接断开</div>' +
+                                    '<div class="device-state"><img src="__img__/icon/normal.png" class="state-icon">设备正常</div>' +
+                                    '</div>' +
+                                    '</div>';
+                            land_content1 = '<div class="ibox-content">' +
+                                    '<ul id="block-tab" class="nav nav-tabs">';
+
+                            $.each(data[1], function (ko, vo) {
+                                ++d;
+                                if (d == 1) {
+                                    a = '<li class="active">';
+                                } else {
+                                    a = '<li class="">';
+                                }
+                                b = '<a href="#b' + vo.id + '" data-toggle="tab" id="' + vo.id + '">' + vo.name + '</a>';
+                                c = '</li>';
+                                land_content2 += a + b + c;
+                            });
+
+                            land_content3 = '<li class="tab-more">' +
+                                    '<a href="javascript:void();" rel="nofollow" class="btn-more">更多<i></i></a>' +
+                                    '</li>' +
+                                    '</ul>' +
+                                    '<div class="blockName-list clearfix">' +
+                                    '<a>地块信息一</a>' +
+                                    '<a class="all-block">全部地块<i class="fa fa-angle-right"></i></a>' +
+                                    '</div>' +
+                                    '<div id="block-tabContent" class="tab-content">';
+                            $.each(data[1], function (ko, vo) {
+                                l = '';
+                                ++m;
+                                if (m == 1) {
+                                    e = '<div id="b' + vo.id + '" class="tab-pane fade in active">'
+                                } else {
+                                    e = '<div id="b' + vo.id + '" class="tab-pane fade">'
+                                }
+                                f = '<table id="park-info" class="table table-hover">' +
+                                        '<thead class="gray-bg reset-vertical">' +
+                                        '<tr>' +
+                                        '<td><img src="__img__/icon/sum.png" class="monitor-icon">总数量:88</td>' +
+                                        '<td><img src="__img__/icon/firingNum.png" class="monitor-icon">启动数量:66</td>' +
+                                        '<td><img src="__img__/icon/Boltmonitoring.png" class="monitor-icon">枪机监控:44</td>' +
+                                        '<td><img src="__img__/icon/Ballmonitoring.png" class="monitor-icon">球机监控:22</td>' +
+                                        '<td class="text-right" colspan="3">' +
+                                        '<a href="{:url(\'admin/RealtimeData/monitors\')}?land_id=' + vo.id + '" target="_blank"><button type="button" class="btn btn-danger btn-sm margin-btn1">' +
+                                        '<img src="__img__/icon/control.png" class="icon-control" />监控' +
+                                        '</button></a>' +
+                                        '</td>' +
+                                        '</tr>' +
+
+                                        '</thead>' +
+                                        '<tbody class="reset-vertical">';
+                                $.each(data[2], function (key, val) {
+                                    if (val.land_id == vo.id) {
+                                        g = '<tr>' +
+                                                '<td><img src="' + val.image + '" class="senser-img">' + val.name_ch + '</td>' +
+                                                '<td><span class="td-title">设备：</span>' + val.name + '</td>' +
+                                                '<td><span class="td-title">编号：</span>' + val.code + '</td>' +
+                                                '<td><span class="td-title">状态：</span>';
+                                        if (val.equipstate == 1) {
+                                            h = '<img src="__img__/icon/normal.png" class="state-icon icon-big"></td>';
+                                        } else if (val.equipstate == 2) {
+                                            h = '<img src="__img__/icon/disconnect.png" class="state-icon icon-big"></td>';
+                                        } else if (val.equipstate == 3) {
+                                            h = '<img src="__img__/icon/warning.png" class="state-icon icon-big"></td>';
+                                        } else if (val.equipstate == 4) {
+                                            h = '<img src="__img__/icon/damage.png" class="state-icon icon-big"></td>';
+                                        }
+                                        i = '<td><span class="td-title">数值：</span>' + val.equipdata + '</td>' +
+                                                '<td><span class="td-title">单位：</span>' + val.value_unit + '</td>' +
+                                                '<td class="text-right">' +
+                                                '<button type="button" class="btn btn-primary btn-sm" onclick="showData(' + val.id + ')">' +
+                                                '<i class="fa fa-search" aria-hidden="true"></i>查看' +
+                                                '</button> ' +
+
+                                                '<button type="button" class="btn btn-gray btn-sm" onclick="showVideo('+val.id+')">' +
+                                                '<img src="__img__/icon/control.png" class="icon-control" />监控' +
+                                                '</button>' +
+
+                                                '</td>' +
+                                                '</tr>';
+                                        l += g + h + i;
+                                    }
+                                });
+                                j = '</tbody>' +
+                                        '</table>' +
+                                        '</div>';
+                                land_content4 += e + f + l + j;
+                            });
+                            var html = title + land_content1 + land_content2 + land_content3 + land_content4 + '</div></div></div></div>';
+                            $('.show div').remove();
+                            $('.show').append(html);
+
+                            if (action == 2) {
+                                var y = $('#val').val();
+                                $("div[class^='tab-pane']").attr('class', 'tab-pane fade');
+
+                                $('#' + y.substr(2) + '').parent('li').parent('ul').children('li').attr('class', '');
+                                $('#' + y.substr(2) + '').parent('li').attr('class', 'active');
+                                $('.btn-more').parent('li').attr('class', 'tab-more');
+                                $('#' + y.substr(1) + '').attr('class', 'tab-pane fade in active');
+
+                            }
+                            window.time3 = setTimeout('getlowland(2)', 300000);
+                        }
+                    });
+            }
+        else{
+                if(!IsCompanyChange){
+                    getlower(1);
+                }
+            }
+        IsCompanyChange =false;
+        IsLandChange = true;
+    }
+//获取地块信息
+//第三级联动onchange事件
+    function getlandinfo(){
+        var land_id = $('#c_land').val();
+        if(land_id!=0){
+            if("undefined" != typeof time2 && time2!=''){
+                clearTimeout(time2);
+            }
+            if("undefined" != typeof time3 && time3!=''){
+                clearTimeout(time3);
+            }
+            if("undefined" != typeof time4 && time4!=''){
+                clearTimeout(time4);
+            }
+            //$('.show div').remove();
+            $.ajax({
+                url: "{:url('admin/RealtimeData/getInfo')}",
+                type: 'post',
+                dataType: 'json',
+                data: {land_id: land_id},
+                success:function(data){
+                    //获取地块下传感器信息
+                    var title = '';
+                    var land_content1 = '';
+                    var land_content2 = '';
+                    var land_content3 = '';
+                    var land_content4 = '';
+                    var e = '';
+                    var g = '';
+                    var h = '';
+                    var i = '';
+                    var j = '';
+                    var l = '';
+                    title = '<div class="col-md-6">'+
+                            '<div class="ibox border-all">'+
+                            '<div class="ibox-title">'+
+                            '<h5>'+data[0]['name']+'</h5>'+
+                            '<div class="state-list clearfix">'+
+                            '<div class="device-state"><img src="__img__/icon/damage.png" class="state-icon">设备损坏</div>'+
+                            '<div class="device-state"><img src="__img__/icon/warning.png" class="state-icon">设备报警</div>'+
+                            '<div class="device-state"><img src="__img__/icon/disconnect.png" class="state-icon">连接断开</div>'+
+                            '<div class="device-state"><img src="__img__/icon/normal.png" class="state-icon">设备正常</div>'+
+                            '</div>'+
+                            '</div>';
+                    land_content1 = '<div class="ibox-content">'+
+                            '<ul id="block-tab" class="nav nav-tabs">';
+
+
+                    land_content2 = '<li class="active">'+
+                                    '<a href="#b'+data[1].id+'" data-toggle="tab">'+data[1].name+'</a>'+
+                                    '</li>';
+
+                    land_content3 =  '<li class="tab-more">'+
+                            '<a href="javascript:void();" rel="nofollow" class="btn-more">更多<i></i></a>'+
+                            '</li>'+
+                            '</ul>'+
+                            '<div class="blockName-list clearfix">'+
+                            '<a>地块信息一</a>'+
+                            '<a class="all-block">全部地块<i class="fa fa-angle-right"></i></a>'+
+                            '</div>'+
+                            '<div id="block-tabContent" class="tab-content">';
+
+                            e = '<div id="b' + data[1].id + '" class="tab-pane fade in active">'+
+                                '<table id="park-info" class="table table-hover">'+
+                                '<thead class="gray-bg reset-vertical">'+
+                                '<tr>' +
+                                '<td><img src="__img__/icon/sum.png" class="monitor-icon">总数量:88</td>'+
+                                '<td><img src="__img__/icon/firingNum.png" class="monitor-icon">启动数量:66</td>'+
+                                '<td><img src="__img__/icon/Boltmonitoring.png" class="monitor-icon">枪机监控:44</td>'+
+                                '<td><img src="__img__/icon/Ballmonitoring.png" class="monitor-icon">球机监控:22</td>'+
+                                '<td class="text-right" colspan="3">'+
+                                '<a href="{:url(\'admin/RealtimeData/monitors\')}?land_id='+data[1].id+'" target="_blank"><button type="button" class="btn btn-danger btn-sm margin-btn1">'+
+                                '<img src="__img__/icon/control.png" class="icon-control" />监控'+
+                                '</button></a>'+
+                                '</td>'+
+                                '</tr>'+
+                                '</thead>' +
+                                '<tbody class="reset-vertical">';
+                        $.each(data[2], function (key, val) {
+                                g = '<tr>' +
+                                        '<td><img src="' + val.image + '" class="senser-img">' + val.name_ch + '</td>' +
+                                        '<td><span class="td-title">设备：</span>' + val.name + '</td>' +
+                                        '<td><span class="td-title">编号：</span>' + val.code + '</td>' +
+                                        '<td><span class="td-title">状态：</span>';
+                                if (val.equipstate == 1) {
+                                    h = '<img src="__img__/icon/normal.png" class="state-icon icon-big"></td>';
+                                } else if (val.equipstate == 2) {
+                                    h = '<img src="__img__/icon/disconnect.png" class="state-icon icon-big"></td>';
+                                } else if (val.equipstate == 3) {
+                                    h = '<img src="__img__/icon/warning.png" class="state-icon icon-big"></td>';
+                                } else if (val.equipstate == 4) {
+                                    h = '<img src="__img__/icon/damage.png" class="state-icon icon-big"></td>';
+                                }
+                                i = '<td><span class="td-title">数值：</span>' + val.equipdata + '</td>' +
+                                        '<td><span class="td-title">单位：</span>' + val.value_unit + '</td>' +
+                                        '<td class="text-right">' +
+                                        '<button type="button" class="btn btn-primary btn-sm" onclick="showData(' + val.id + ')">' +
+                                        '<i class="fa fa-search" aria-hidden="true"></i>查看' +
+                                        '</button> ' +
+
+                                        '<button type="button" class="btn btn-gray btn-sm" onclick="showVideo('+val.id+')">' +
+                                        '<img src="__img__/icon/control.png" class="icon-control" />监控' +
+                                        '</button>' +
+
+                                        '</td>' +
+                                        '</tr>';
+                                l += g + h + i;
+                        });
+                        j = '</tbody>' +
+                                '</table>' +
+                                '</div>';
+                        land_content4 += e + l + j;
+                    var html = title+land_content1+land_content2+land_content3+land_content4+'</div></div></div></div>';
+                    $('.show div').remove();
+                    $('.show').append(html);
+                    window.time4 = setTimeout('getlandinfo()',300000);
+                }
+            });
+        }else{
+            if(!IsLandChange){
+                getlowland(1);
+            }
+        }
+        IsLandChange = false;
+    }
+//更新页面数据定时器
+var time1 = window.setTimeout("getlower(2)",300000);
+
+</script>
+
+<script>
+    function showVideo(equip_id){
+        $.ajax({
+            url: "{:url('admin/RealtimeData/getEquipVideo')}",
+            type: 'post',
+            dataType: 'json',
+            data: {equip_id: equip_id},
+            success:function(data) {
+                $('.video-setting').attr('onclick', 'VideoSetting(' + equip_id + ')');
+                if(data[0] == null){
+                    layer.msg('该地块下无监控设备！', {
+                        icon: 7,
+                        time: 2000
+                    });
+                    return;
+                }
+                if(data[1] == null){
+                    layer.msg('该传感器无对应的监控设备！', {
+                        icon: 7,
+                        time: 2000
+                    });
+                    return;
+                }
+                var ip = data[0].server_ip;
+                var port = data[0].port;
+                var username = data[0].username;
+                var password = authcode(data[0].password,"{$Think.config.salt}");
+                var streamtype = 1;
+                var channels = data[1].channels;
+                var status = data[1].status;
+                if(status != 1){
+                    layer.msg('监控设备未启用！', {
+                        icon: 7,
+                        time: 2000
+                    });
+                    return;
+                }
+
+        if(checkPlugin() != false) {
+                    $('.video-box').css('display', 'block');
+                    if(initPlugin($('.video-box').width(), $('.video-box').height()) != false) {
+                        var start = function () {
+                            clickLogout(ip);
+                            clickLogin(ip, port, username, password, streamtype, channels);
+                        };
+                        setTimeout(start, 500);
+                    }
+                }
+            }
+        });
+    }
+    //控制播放器
+    /*function VideoPlay(me){
+        var myVideo =$(me).siblings('video');
+        $(me).hide();
+        myVideo[0].play();
+        myVideo.attr({
+            controls: 'controls'
+        });
+        myVideo[0].muted=true;
+    }*/
+    function VideoClose(){
+        clickStopRealPlay();
+        $('.video-box').css('display','none');
+    }
+    function VideoSetting(equip_id){
+        window.open("{:url('monitor')}?equip_id="+equip_id);
+        VideoClose();
+    }
+</script>
+<script>
+    'use strict';
+    $(() => {
+    let $btn = $('.btn-more'),
+    $obj = $btn.closest('.ibox-content').find('.blockName-list');
+    $btn.hover(() => {
+    $obj.addClass('unfold');
+    }, (e) => {
+    if (e.toElement == $obj[0]) return;
+    $obj.removeClass('unfold');
+    });
+    $obj.mouseleave(function(e){
+    if(e.toElement == $btn[0]) return;
+    $(this).removeClass('unfold');
+    });
+    })
+</script>
+{/block}
